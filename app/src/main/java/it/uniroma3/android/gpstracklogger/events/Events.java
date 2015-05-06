@@ -28,5 +28,12 @@ public class Events {
 
     }
 
+    public static class Directory {
+        public String directory;
+        public Directory (String dir) {
+            this.directory = dir;
+        }
+    }
+
 
 }

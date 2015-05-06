@@ -91,18 +91,21 @@ public class GPSMainActivity extends Activity {
     }
 
     private void stopClick() {
-        stopLogging();
-        stopService(serviceIntent);
-        setTextViewValue(R.id.notice, "Service stopped");
-        setTextViewValue(R.id.provider, "");
-        setTextViewValue(R.id.enabled, "");
-        setTextViewValue(R.id.available, "");
-        setTextViewValue(R.id.timestamp, "");
-        setTextViewValue(R.id.latitude, "");
-        setTextViewValue(R.id.longitude, "");
-        setTextViewValue(R.id.speed, "");
-        setTextViewValue(R.id.altitude, "");
-        serviceIntent = null;
+        if (serviceIntent != null) {
+            stopLogging();
+            stopService(serviceIntent);
+            setTextViewValue(R.id.provider, "");
+            setTextViewValue(R.id.enabled, "");
+            setTextViewValue(R.id.available, "");
+            setTextViewValue(R.id.timestamp, "");
+            setTextViewValue(R.id.latitude, "");
+            setTextViewValue(R.id.longitude, "");
+            setTextViewValue(R.id.speed, "");
+            setTextViewValue(R.id.altitude, "");
+            serviceIntent = null;
+        }
+        else
+            setTextViewValue(R.id.notice, "Already stopped");
     }
 
     private void stopLogging() {
@@ -116,6 +119,10 @@ public class GPSMainActivity extends Activity {
 
     public void onEventMainThread(Events.Message message) {
         setTextViewValue(message.id, message.info);
+    }
+
+    public void onEventMainThread(Events.Directory dir) {
+        setTextViewValue(R.id.notice, "Saved in:" + dir.directory);
     }
 
     private void displayLocationInfo(Location location) {

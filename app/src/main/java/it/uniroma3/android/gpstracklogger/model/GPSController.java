@@ -1,6 +1,5 @@
 package it.uniroma3.android.gpstracklogger.model;
 
-import android.content.Context;
 import android.location.Location;
 
 import it.uniroma3.android.gpstracklogger.logger.FileLoggerFactory;
@@ -23,8 +22,8 @@ public class GPSController {
         return this.currentTrack.addTrackPoint(loc);
     }
 
-    public void writeToFile(Context context) {
-        FileLoggerFactory.write(context, this.currentTrack);
+    public void writeToFile() {
+        FileLoggerFactory.write(this.currentTrack);
     }
 
 }

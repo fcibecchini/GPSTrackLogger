@@ -1,10 +1,11 @@
 package it.uniroma3.android.gpstracklogger.logger;
 
-import android.content.Context;
-import android.location.Location;
+import android.os.Environment;
 
 import java.io.File;
 
+import de.greenrobot.event.EventBus;
+import it.uniroma3.android.gpstracklogger.events.Events;
 import it.uniroma3.android.gpstracklogger.model.Track;
 
 /**
@@ -12,22 +13,21 @@ import it.uniroma3.android.gpstracklogger.model.Track;
  */
 public class FileLoggerFactory {
 
-    public static GpxFileLogger getLogger(Context context, Track track) {
-        File gpxFileFolder = new File(context.getFilesDir().toString());
+    public static GpxFileLogger getLogger(Track track) {
+        String directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+        File gpxFileFolder = new File(directory);
         if (!gpxFileFolder.exists()) {
             gpxFileFolder.mkdirs();
         }
         File gpxFile = new File(gpxFileFolder, track.getName().replace(":","-") + ".gpx");
         GpxFileLogger logger = new GpxFileLogger(gpxFile, track);
+        EventBus.getDefault().post(new Events.Directory(directory));
         return logger;
-
-
-
     }
 
 
-    public static void write(Context context, Track track) {
-        GpxFileLogger logger = getLogger(context, track);
+    public static void write(Track track) {
+        GpxFileLogger logger = getLogger(track);
         logger.write();
     }
 

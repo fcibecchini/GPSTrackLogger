@@ -64,7 +64,7 @@ public class GPSLoggingService extends Service {
     public void startGPSManager() {
         gpsLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         gpsLocationListener = new GPSLocationListener(this);
-        gpsLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0, gpsLocationListener);
+        gpsLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, gpsLocationListener);
     }
 
     public void stopGPSManager() {
@@ -89,9 +89,6 @@ public class GPSLoggingService extends Service {
 
     private void stopLogging() {
         stopGPSManager();
-        controller.writeToFile(getApplicationContext());
+        controller.writeToFile();
     }
-
-
-
 }
