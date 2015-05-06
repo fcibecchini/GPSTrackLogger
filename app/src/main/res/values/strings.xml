@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GPS Track Logger</string>
+
+    <string name="start">Start Logging</string>
+    <string name="stop">Stop Logging</string>
+    <string name="action_settings">Settings</string>
+</resources>
