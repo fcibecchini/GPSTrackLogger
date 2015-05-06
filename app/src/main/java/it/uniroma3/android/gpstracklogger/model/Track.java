@@ -47,7 +47,7 @@ public class Track {
 
     private String getISODateTime(Date dateToFormat) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'",
-                Locale.US);
+                Locale.ITALY);
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         return sdf.format(dateToFormat);
     }
