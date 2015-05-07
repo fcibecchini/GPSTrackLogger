@@ -7,35 +7,32 @@ package it.uniroma3.android.gpstracklogger.model;
 import android.location.Location;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Track {
     private String name;
-    private List<TrackPoint> trackPoints;
+    private Set<TrackPoint> trackPoints;
 
     public Track() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy kk:mm:ss");
         this.name = sdf.format(new Date());
-        this.trackPoints = new ArrayList<>();
+        this.trackPoints = new TreeSet<>(new TrackPointComparator());
     }
 
     public String getName() {
         return this.name;
     }
 
-    public List<TrackPoint> getTrackPoints(){
+    public Set<TrackPoint> getTrackPoints(){
         return this.trackPoints;
     }
 
     public boolean addTrackPoint(Location loc) {
         TrackPoint trackPoint = new TrackPoint();
         Date timestamp = new Date(loc.getTime());
-        String time = getISODateTime(timestamp);
-        trackPoint.setTime(time);
+        trackPoint.setTime(timestamp);
         trackPoint.setLatitude(loc.getLatitude());
         trackPoint.setLongitude(loc.getLongitude());
         if (loc.hasAltitude())
@@ -43,13 +40,6 @@ public class Track {
         if (loc.hasSpeed())
             trackPoint.setSpeed(loc.getSpeed());
         return this.trackPoints.add(trackPoint);
-    }
-
-    private String getISODateTime(Date dateToFormat) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'",
-                Locale.ITALY);
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return sdf.format(dateToFormat);
     }
 
     @Override

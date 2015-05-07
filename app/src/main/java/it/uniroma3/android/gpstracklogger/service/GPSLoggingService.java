@@ -8,8 +8,8 @@ import android.os.IBinder;
 
 import de.greenrobot.event.EventBus;
 import it.uniroma3.android.gpstracklogger.events.Events;
+import it.uniroma3.android.gpstracklogger.helpers.Session;
 import it.uniroma3.android.gpstracklogger.listener.GPSLocationListener;
-import it.uniroma3.android.gpstracklogger.model.GPSController;
 
 /**
  * Created by Fabio on 03/05/2015.
@@ -17,7 +17,6 @@ import it.uniroma3.android.gpstracklogger.model.GPSController;
 public class GPSLoggingService extends Service {
     protected LocationManager gpsLocationManager;
     private GPSLocationListener gpsLocationListener;
-    private GPSController controller;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -28,12 +27,11 @@ public class GPSLoggingService extends Service {
     public void onCreate() {
         super.onCreate();
         RegisterEventBus();
-        controller = new GPSController();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        this.startGPSManager();
+        startGPSManager();
         return START_REDELIVER_INTENT;
     }
 
@@ -56,27 +54,32 @@ public class GPSLoggingService extends Service {
     }
 
     public void restartGPSManager() {
+        saveTrack(false);
         stopGPSManager();
         startGPSManager();
     }
 
 
     public void startGPSManager() {
-        gpsLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        gpsLocationListener = new GPSLocationListener(this);
+        if (gpsLocationListener == null) {
+            gpsLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            gpsLocationListener = new GPSLocationListener(this);
+        }
         gpsLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, gpsLocationListener);
     }
 
     public void stopGPSManager() {
         if (gpsLocationListener != null) {
             gpsLocationManager.removeUpdates(gpsLocationListener);
+            gpsLocationListener = null;
         }
-
     }
 
     public void onLocationChanged(Location location) {
-        controller.addTrackPoint(location);
-        EventBus.getDefault().post(new Events.LocationUpdate(location));
+        if (Session.isStarted()) {
+            Session.getController().addTrackPoint(location);
+            EventBus.getDefault().post(new Events.LocationUpdate(location));
+        }
     }
 
     public void sendMessage(int id, String message) {
@@ -87,8 +90,22 @@ public class GPSLoggingService extends Service {
         stopLogging();
     }
 
+    public void onEvent(Events.Start start) {
+        startLogging();
+    }
+
+    private void startLogging() {
+        Session.setStarted(true);
+        startGPSManager();
+    }
+
     private void stopLogging() {
+        Session.setStarted(false);
         stopGPSManager();
-        controller.writeToFile();
+        saveTrack(true);
+    }
+
+    private void saveTrack(boolean stop) {
+        Session.getController().writeToFile(stop);
     }
 }

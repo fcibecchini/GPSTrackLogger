@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import de.greenrobot.event.EventBus;
 import it.uniroma3.android.gpstracklogger.events.Events;
+import it.uniroma3.android.gpstracklogger.helpers.Session;
 import it.uniroma3.android.gpstracklogger.service.GPSLoggingService;
 import java.util.Date;
 
@@ -24,6 +25,7 @@ public class GPSMainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gpsmain);
         RegisterEventBus();
+        startService();
         Button start = (Button) findViewById(R.id.startButton);
         Button stop = (Button) findViewById(R.id.stopButton);
         start.setOnClickListener(new View.OnClickListener() {
@@ -75,37 +77,24 @@ public class GPSMainActivity extends Activity {
     }
 
     private void startClick() {
-        String notice;
-        if (serviceIntent == null) {
-            serviceIntent = new Intent(this, GPSLoggingService.class);
-            startService(serviceIntent);
-            notice = "Service started";
+        if (!Session.isStarted()) {
+            startLogging();
         }
-        else {
-            notice = "Service already running...";
-        }
-        setTextViewValue(R.id.notice, notice);
-        setTextViewValue(R.id.provider, "GPS");
-        setTextViewValue(R.id.available, "TRUE");
-        setTextViewValue(R.id.enabled, "TRUE");
     }
 
     private void stopClick() {
-        if (serviceIntent != null) {
+        if (Session.isStarted()) {
             stopLogging();
-            stopService(serviceIntent);
-            setTextViewValue(R.id.provider, "");
-            setTextViewValue(R.id.enabled, "");
-            setTextViewValue(R.id.available, "");
             setTextViewValue(R.id.timestamp, "");
             setTextViewValue(R.id.latitude, "");
             setTextViewValue(R.id.longitude, "");
             setTextViewValue(R.id.speed, "");
             setTextViewValue(R.id.altitude, "");
-            serviceIntent = null;
         }
-        else
-            setTextViewValue(R.id.notice, "Already stopped");
+    }
+
+    private void startLogging() {
+        EventBus.getDefault().post(new Events.Start());
     }
 
     private void stopLogging() {
@@ -147,8 +136,22 @@ public class GPSMainActivity extends Activity {
         textView.setText(value);
     }
 
+    private void startService() {
+        serviceIntent = new Intent(this, GPSLoggingService.class);
+        startService(serviceIntent);
+    }
+
+    private void stopService() {
+        try {
+            stopService(serviceIntent);
+        } catch (Exception e) {
+            setTextViewValue(R.id.notice, "could not stop service");
+        }
+    }
+
     @Override
     protected void onDestroy() {
+        stopService();
         UnregisterEventBus();
         super.onDestroy();
     }

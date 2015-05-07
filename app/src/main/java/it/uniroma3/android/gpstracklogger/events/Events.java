@@ -7,9 +7,9 @@ import android.location.Location;
  */
 public class Events {
 
-    public static class Stop {
+    public static class Start {}
 
-    }
+    public static class Stop {}
 
     public static class LocationUpdate {
         public Location location;

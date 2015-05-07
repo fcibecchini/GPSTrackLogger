@@ -10,20 +10,20 @@ import it.uniroma3.android.gpstracklogger.logger.FileLoggerFactory;
 public class GPSController {
     private Track currentTrack;
 
-    public GPSController() {
-        this.currentTrack = new Track();
-    }
-
     public Track getCurrentTrack() {
         return this.currentTrack;
     }
 
     public boolean addTrackPoint(Location loc) {
+        if (this.currentTrack == null)
+            this.currentTrack = new Track();
         return this.currentTrack.addTrackPoint(loc);
     }
 
-    public void writeToFile() {
+    public void writeToFile(boolean stop) {
         FileLoggerFactory.write(this.currentTrack);
+        if (stop)
+            this.currentTrack = null;
     }
 
 }

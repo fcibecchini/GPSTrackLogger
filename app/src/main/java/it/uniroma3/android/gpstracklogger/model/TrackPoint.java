@@ -1,5 +1,7 @@
 package it.uniroma3.android.gpstracklogger.model;
 
+import java.util.Date;
+
 /**
  * Created by Fabio on 02/05/2015.
  */
@@ -8,7 +10,7 @@ public class TrackPoint {
     private double longitude;
     private double altitude;
     private float speed;
-    private String time;
+    private Date time;
 
     public TrackPoint() {
 
@@ -46,11 +48,11 @@ public class TrackPoint {
         this.altitude = altitude;
     }
 
-    public String getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 
