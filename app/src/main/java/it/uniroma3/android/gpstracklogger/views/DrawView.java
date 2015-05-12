@@ -19,10 +19,9 @@ import it.uniroma3.android.gpstracklogger.model.TrackPoint;
 public class DrawView extends View {
     private final double radius = 6378137;
     private double currentLatitude;
-    private double sizeX; // gradi di long dell'asse X
-    private double sizeY = 0.002; // gradi di lat dell'asse Y
-    private double sizeXMetres = 111; // metri dell'asse X
-    private double sizeYMetres = 222; // metri dell'asse Y
+    private double dimensioniCasella = 0.0001; // 10 m
+    private double scalaLongitudine = 0.001; // 100 m
+    private double scalaLatitudine = 0.002; // 200 m
     Paint paint = new Paint();
     private Track track;
 
@@ -32,7 +31,6 @@ public class DrawView extends View {
         paint.setStrokeWidth(4);
         track = t;
         currentLatitude = latitude;
-        sizeX = getSizeX(currentLatitude);
     }
 
     @Override
@@ -44,26 +42,39 @@ public class DrawView extends View {
         int maxY = mdispSize.y;
         int xC = maxX/2;
         int yC = maxY/2;
+        int casellaX = maxX/10;
+        int casellaY = maxY/20;
         int x = xC;
         int y = yC;
         Iterator<TrackPoint> iterator = track.getTrackPoints().iterator();
         TrackPoint p1 = iterator.next();
         TrackPoint p2 = iterator.next();
-        y = getY(y, maxY, p1, p2);
-        x = getX(x, maxX, p1, p2);
+        double distanzaY = Math.abs(p1.getLatitude() - p2.getLatitude());
+        if (distanzaY >= dimensioniCasella) {
+            int incremento = (int) (distanzaY * 10000);
+            int y1 = incremento * casellaY;
+            if (p2.getLatitude() > p1.getLatitude()) {
+                //decrementa la Y
+                y = y - y1;
+            }
+            else {
+                //incrementa la Y
+                y = y + y1;
+            }
+        }
+        double distanzaX = Math.abs(p1.getLongitude() - p2.getLongitude());
+        if (distanzaX >= dimensioniCasella) {
+            int incremento = (int) (distanzaX * 10000);
+            int x1 = incremento * casellaX;
+            if (p2.getLongitude() > p1.getLongitude())
+                x = x + x1;
+            else
+                x = x - x1;
+        }
         canvas.drawLine(xC, yC, x, y, paint);
-        /*while (iterator.hasNext()) {
-            int oldX = x;
-            int oldY = y;
-            TrackPoint p3 = iterator.next();
-            x = getX(x, maxX, p2, p3);
-            y = getY(y, maxY, p2, p3);
-            canvas.drawLine(oldX, oldY, x, y, paint);
-            p2 = p3;
-        }*/
     }
 
-    // gradi di longitudine dell'asse X
+    /* // gradi di longitudine dell'asse X
     private double getSizeX(double latitude) {
         double distancePerLongitude = (Math.PI / 180) * radius * Math.cos(latitude);
         return sizeXMetres / distancePerLongitude;
@@ -113,17 +124,7 @@ public class DrawView extends View {
         return height/20;
     }
 
-    //gradi di una casella dell'asse X
-    private int degreesX() {
-        return (int) (sizeX/10);
-    }
 
-    //gradi di una casella dell'asse Y
-    private int degreesY() {
-        return (int) (sizeY/20);
-    }
-
-    /*
     private double getDistance(TrackPoint p1, TrackPoint p2) {
         double lat1 = Math.toRadians(p1.getLatitude());
         double lat2 = Math.toRadians(p2.getLatitude());
