@@ -22,20 +22,14 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.04"
+        android:layout_weight="0.02"
         android:text="@string/stop"
         android:id="@+id/stopButton" />
 
-    <TextView
-        android:layout_width="315dp"
-        android:layout_height="90dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/notice"
-        android:enabled="false" />
-
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="293dp"
+        android:layout_height="133dp"
+        android:layout_weight="0.38">
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -138,6 +132,21 @@
         </TableLayout>
     </ScrollView>
 
+    <Button
+        android:layout_width="315dp"
+        android:layout_height="wrap_content"
+        android:text="@string/draw"
+        android:id="@+id/draw"
+        android:clickable="false"
+        android:layout_weight="0.02" />
+
+    <TextView
+        android:layout_width="287dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/notice"
+        android:enabled="false"
+        android:layout_weight="0.10" />
 
 
 </LinearLayout>

@@ -15,6 +15,7 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -27,6 +28,15 @@
                 <action android:name="it.uniroma3.android.gpstracklogger.service.GPSLoggingService" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name=".StartDrawActivity"
+            android:label="@string/title_activity_start_draw"
+            android:parentActivityName=".GPSMainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="it.uniroma3.android.gpstracklogger.GPSMainActivity" />
+        </activity>
     </application>
 
 </manifest>

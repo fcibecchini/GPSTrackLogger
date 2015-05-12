@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import de.greenrobot.event.EventBus;
 import it.uniroma3.android.gpstracklogger.events.Events;
-import it.uniroma3.android.gpstracklogger.helpers.Session;
+import it.uniroma3.android.gpstracklogger.application.Session;
 import it.uniroma3.android.gpstracklogger.service.GPSLoggingService;
 import java.util.Date;
 
@@ -26,8 +26,10 @@ public class GPSMainActivity extends Activity {
         setContentView(R.layout.activity_gpsmain);
         RegisterEventBus();
         startService();
+        scheduleWriting();
         Button start = (Button) findViewById(R.id.startButton);
         Button stop = (Button) findViewById(R.id.stopButton);
+        Button draw = (Button) findViewById(R.id.draw);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,6 +42,13 @@ public class GPSMainActivity extends Activity {
                 stopClick();
             }
         });
+        draw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawClick();
+            }
+        });
+
     }
 
     private void RegisterEventBus() {
@@ -51,6 +60,12 @@ public class GPSMainActivity extends Activity {
             EventBus.getDefault().unregister(this);
         } catch (Throwable t){
             //this may crash if registration did not go through. just be safe
+        }
+    }
+
+    private void scheduleWriting(){
+        if (Session.isStarted()) {
+            Session.getController().scheduleWriting();
         }
     }
 
@@ -78,8 +93,11 @@ public class GPSMainActivity extends Activity {
 
     private void startClick() {
         if (!Session.isStarted()) {
+            setTextViewValue(R.id.notice, "Tracking...");
             startLogging();
         }
+        else
+            setTextViewValue(R.id.notice, "Already tracking");
     }
 
     private void stopClick() {
@@ -91,6 +109,17 @@ public class GPSMainActivity extends Activity {
             setTextViewValue(R.id.speed, "");
             setTextViewValue(R.id.altitude, "");
         }
+        else
+            setTextViewValue(R.id.notice, "Already stopped");
+    }
+
+    private void drawClick() {
+        if (Session.isStarted()) {
+            Intent draw = new Intent(this, StartDrawActivity.class);
+            startActivity(draw);
+        }
+        else
+            setTextViewValue(R.id.notice, "No Track...");
     }
 
     private void startLogging() {

@@ -8,7 +8,7 @@ import android.os.IBinder;
 
 import de.greenrobot.event.EventBus;
 import it.uniroma3.android.gpstracklogger.events.Events;
-import it.uniroma3.android.gpstracklogger.helpers.Session;
+import it.uniroma3.android.gpstracklogger.application.Session;
 import it.uniroma3.android.gpstracklogger.listener.GPSLocationListener;
 
 /**

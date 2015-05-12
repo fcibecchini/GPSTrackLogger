@@ -4,4 +4,8 @@
     <string name="start">Start Logging</string>
     <string name="stop">Stop Logging</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_start_draw">StartDraw</string>
+    <string name="draw">View Track</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>
