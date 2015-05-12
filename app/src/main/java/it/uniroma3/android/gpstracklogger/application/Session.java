@@ -1,4 +1,4 @@
-package it.uniroma3.android.gpstracklogger.helpers;
+package it.uniroma3.android.gpstracklogger.application;
 
 import android.app.Application;
 
@@ -15,8 +15,8 @@ public class Session extends Application {
         return isStarted;
     }
 
-    public static void setStarted(boolean isServiceStarted) {
-        Session.isStarted = isServiceStarted;
+    public static void setStarted(boolean started) {
+        Session.isStarted = started;
     }
 
     public static GPSController getController() {
@@ -24,6 +24,4 @@ public class Session extends Application {
             controller = new GPSController();
         return controller;
     }
-
-
 }
