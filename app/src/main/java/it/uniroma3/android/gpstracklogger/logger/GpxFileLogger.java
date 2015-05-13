@@ -14,18 +14,13 @@ import it.uniroma3.android.gpstracklogger.model.TrackPoint;
 /**
  * Created by Fabio on 02/05/2015.
  */
-public class GpxFileLogger implements Runnable {
+public class GpxFileLogger {
     private File gpxFile = null;
     private Track track;
 
     public GpxFileLogger(File gpx, Track t) {
         this.gpxFile = gpx;
         this.track = t;
-    }
-
-    @Override
-    public void run() {
-        write();
     }
 
     public void write() {

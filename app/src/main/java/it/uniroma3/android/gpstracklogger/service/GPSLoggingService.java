@@ -31,7 +31,7 @@ public class GPSLoggingService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        startGPSManager();
+        Session.getController();
         return START_REDELIVER_INTENT;
     }
 

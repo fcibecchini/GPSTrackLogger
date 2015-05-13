@@ -16,7 +16,6 @@ import it.uniroma3.android.gpstracklogger.application.Session;
 import it.uniroma3.android.gpstracklogger.service.GPSLoggingService;
 import java.util.Date;
 
-
 public class GPSMainActivity extends Activity {
     private Intent serviceIntent;
 
@@ -26,7 +25,6 @@ public class GPSMainActivity extends Activity {
         setContentView(R.layout.activity_gpsmain);
         RegisterEventBus();
         startService();
-        scheduleWriting();
         Button start = (Button) findViewById(R.id.startButton);
         Button stop = (Button) findViewById(R.id.stopButton);
         Button draw = (Button) findViewById(R.id.draw);
@@ -48,7 +46,6 @@ public class GPSMainActivity extends Activity {
                 drawClick();
             }
         });
-
     }
 
     private void RegisterEventBus() {
@@ -64,9 +61,7 @@ public class GPSMainActivity extends Activity {
     }
 
     private void scheduleWriting(){
-        if (Session.isStarted()) {
-            Session.getController().scheduleWriting();
-        }
+        Session.getController().scheduleWriting();
     }
 
     @Override
@@ -94,6 +89,7 @@ public class GPSMainActivity extends Activity {
     private void startClick() {
         if (!Session.isStarted()) {
             setTextViewValue(R.id.notice, "Tracking...");
+            scheduleWriting();
             startLogging();
         }
         else
