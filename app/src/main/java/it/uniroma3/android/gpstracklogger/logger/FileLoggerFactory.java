@@ -24,7 +24,11 @@ public class FileLoggerFactory {
         File gpxFile = new File(gpxFileFolder, fileName + ".gpx");
         if (gpxFile.exists()) {
             countFile++;
-            gpxFile = new File(gpxFileFolder, fileName + String.valueOf(countFile) + ".gpx");
+            String rename = "(" + String.valueOf(countFile) + ")";
+            gpxFile = new File(gpxFileFolder, fileName + rename + ".gpx");
+        }
+        else {
+            countFile = 0;
         }
         GpxFileLogger logger = new GpxFileLogger(gpxFile, track);
         EventBus.getDefault().post(new Events.Directory(directory));
