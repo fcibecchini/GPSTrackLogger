@@ -46,6 +46,10 @@ public class DrawView extends View {
         this.scaleFactor = scale;
     }
 
+    public float getScaleFactor() {
+        return this.scaleFactor;
+    }
+
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);

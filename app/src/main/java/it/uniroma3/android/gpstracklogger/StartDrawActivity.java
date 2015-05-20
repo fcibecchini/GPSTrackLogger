@@ -21,21 +21,7 @@ public class StartDrawActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_draw);
-        mScaleDetector = new ScaleGestureDetector(getApplicationContext(), new ScaleGestureDetector.OnScaleGestureListener() {
-            @Override
-            public void onScaleEnd(ScaleGestureDetector detector) {
-            }
-            @Override
-            public boolean onScaleBegin(ScaleGestureDetector detector) {
-                return true;
-            }
-            @Override
-            public boolean onScale(ScaleGestureDetector detector) {
-                drawView.setScaleFactor(detector.getScaleFactor());
-                drawView.invalidate();
-                return false;
-            }
-        });
+        mScaleDetector = new ScaleGestureDetector(getApplicationContext(), new ScaleListener());
         root = (ViewGroup) findViewById(R.id.linearlayout1);
         drawView = new DrawView(this);
         drawView.setBackgroundColor(Color.WHITE);
@@ -71,6 +57,21 @@ public class StartDrawActivity extends Activity {
             }
         }
         return true;
+    }
+
+    private class ScaleListener
+            extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            float mScaleFactor = drawView.getScaleFactor();
+            mScaleFactor *= detector.getScaleFactor();
+
+            // Don't let the object get too small or too large.
+            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
+            drawView.setScaleFactor(mScaleFactor);
+            drawView.invalidate();
+            return true;
+        }
     }
 
 }
