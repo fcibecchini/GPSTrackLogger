@@ -4,10 +4,6 @@ import android.location.Location;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import java.io.File;
-
-import it.uniroma3.android.gpstracklogger.logger.GpxFileLogger;
-
 /**
  * Created by Fabio on 05/05/2015.
  */

@@ -37,6 +37,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="it.uniroma3.android.gpstracklogger.GPSMainActivity" />
         </activity>
+        <activity
+            android:name=".LoadFileActivity"
+            android:label="@string/title_activity_load_file" >
+        </activity>
     </application>
 
 </manifest>

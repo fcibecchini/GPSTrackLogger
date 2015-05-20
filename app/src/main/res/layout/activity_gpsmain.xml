@@ -148,5 +148,13 @@
         android:enabled="false"
         android:layout_weight="0.10" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Load Track"
+        android:id="@+id/loadtrack"
+        android:layout_weight="0.02" />
+
 
 </LinearLayout>

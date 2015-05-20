@@ -1,4 +1,4 @@
-package it.uniroma3.android.gpstracklogger.logger;
+package it.uniroma3.android.gpstracklogger.files;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

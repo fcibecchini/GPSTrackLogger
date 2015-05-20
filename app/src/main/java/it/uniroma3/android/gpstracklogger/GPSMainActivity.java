@@ -28,6 +28,7 @@ public class GPSMainActivity extends Activity {
         Button start = (Button) findViewById(R.id.startButton);
         Button stop = (Button) findViewById(R.id.stopButton);
         Button draw = (Button) findViewById(R.id.draw);
+        Button load = (Button) findViewById(R.id.loadtrack);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,6 +45,12 @@ public class GPSMainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 drawClick();
+            }
+        });
+        load.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadClick();
             }
         });
     }
@@ -110,12 +117,13 @@ public class GPSMainActivity extends Activity {
     }
 
     private void drawClick() {
-        if (Session.isStarted()) {
-            Intent draw = new Intent(this, StartDrawActivity.class);
-            startActivity(draw);
-        }
-        else
-            setTextViewValue(R.id.notice, "No Track...");
+        Intent draw = new Intent(this, StartDrawActivity.class);
+        startActivity(draw);
+    }
+
+    private void loadClick() {
+        Intent load = new Intent(this, LoadFileActivity.class);
+        startActivity(load);
     }
 
     private void startLogging() {

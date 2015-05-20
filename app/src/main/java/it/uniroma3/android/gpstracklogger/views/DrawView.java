@@ -5,11 +5,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.view.Display;
 import android.view.View;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
+import it.uniroma3.android.gpstracklogger.application.Converter;
+import it.uniroma3.android.gpstracklogger.application.Session;
 import it.uniroma3.android.gpstracklogger.model.Track;
 import it.uniroma3.android.gpstracklogger.model.TrackPoint;
 
@@ -17,136 +20,85 @@ import it.uniroma3.android.gpstracklogger.model.TrackPoint;
  * TODO: document your custom view class.
  */
 public class DrawView extends View {
-    private final double radius = 6378137;
-    private double currentLatitude;
-    private double dimensioniCasella = 0.0001; // 10 m
-    private double scalaLongitudine = 0.001; // 100 m
-    private double scalaLatitudine = 0.002; // 200 m
+    private Track current;
+    private List<Track> imported;
+    private List<TrackPoint> waypoints;
+    private Converter converter;
+    private double scala = 1000000; // 10 m
     Paint paint = new Paint();
-    private Track track;
+    private float scaleFactor;
+    private int xc, yc;
 
-    public DrawView(Context context, Track t, double latitude) {
+    public DrawView(Context context) {
         super(context);
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(4);
-        track = t;
-        currentLatitude = latitude;
+        paint.setTextSize(30);
+        scaleFactor = 1f;
+        current = Session.getController().getCurrentTrack();
+        imported = Session.getController().getImportedTracks();
+        waypoints = Session.getController().getWaypoints();
+    }
+
+    public void setScaleFactor(float scale) {
+        this.scaleFactor = scale;
     }
 
     @Override
     public void onDraw(Canvas canvas) {
-        Display mdisp = getDisplay();
-        Point mdispSize = new Point();
-        mdisp.getSize(mdispSize);
-        int maxX = mdispSize.x;
-        int maxY = mdispSize.y;
-        int xC = maxX/2;
-        int yC = maxY/2;
-        int casellaX = maxX/10;
-        int casellaY = maxY/20;
-        int x = xC;
-        int y = yC;
-        Iterator<TrackPoint> iterator = track.getTrackPoints().iterator();
-        TrackPoint p1 = iterator.next();
-        TrackPoint p2 = iterator.next();
-        double distanzaY = Math.abs(p1.getLatitude() - p2.getLatitude());
-        if (distanzaY >= dimensioniCasella) {
-            int incremento = (int) (distanzaY * 10000);
-            int y1 = incremento * casellaY;
-            if (p2.getLatitude() > p1.getLatitude()) {
-                //decrementa la Y
-                y = y - y1;
-            }
-            else {
-                //incrementa la Y
-                y = y + y1;
+        super.onDraw(canvas);
+        canvas.save();
+        xc = canvas.getWidth()/2;
+        yc = canvas.getHeight()/2;
+        canvas.translate(xc, yc);
+        canvas.scale(scaleFactor, -scaleFactor);
+        if (Session.isStarted()) {
+            Set<TrackPoint> currentPoints = current.getTrackPoints();
+            if (currentPoints.size() > 1) {
+                Iterator<TrackPoint> iterator = currentPoints.iterator();
+                TrackPoint t1 = iterator.next();
+                if (converter == null)
+                    converter = new Converter(t1.getLongitude(), t1.getLatitude(), scala);
+                TrackPoint t2 = iterator.next();
+                Point p1 = converter.getPixel(t2);
+                canvas.drawLine(0, 0, p1.x, p1.y, paint);
+                while (iterator.hasNext()) {
+                    Point p2 = converter.getPixel(iterator.next());
+                    canvas.drawLine(p1.x, p1.y, p2.x, p2.y, paint);
+                    p1 = p2;
+                }
             }
         }
-        double distanzaX = Math.abs(p1.getLongitude() - p2.getLongitude());
-        if (distanzaX >= dimensioniCasella) {
-            int incremento = (int) (distanzaX * 10000);
-            int x1 = incremento * casellaX;
-            if (p2.getLongitude() > p1.getLongitude())
-                x = x + x1;
-            else
-                x = x - x1;
+        if (!imported.isEmpty()) {
+            for (Track track : imported) {
+                if (!track.getTrackPoints().isEmpty()) {
+                    Iterator<TrackPoint> iterator = track.getTrackPoints().iterator();
+                    TrackPoint t1 = iterator.next();
+                    if (converter == null)
+                        converter = new Converter(t1.getLongitude(), t1.getLatitude(), scala);
+                    TrackPoint t2 = iterator.next();
+                    Point p1 = converter.getPixel(t2);
+                    canvas.drawLine(0, 0, p1.x, p1.y, paint);
+                    while (iterator.hasNext()) {
+                        Point p2 = converter.getPixel(iterator.next());
+                        canvas.drawLine(p1.x, p1.y, p2.x, p2.y, paint);
+                        p1 = p2;
+                    }
+                }
+            }
         }
-        canvas.drawLine(xC, yC, x, y, paint);
-    }
 
-    /* // gradi di longitudine dell'asse X
-    private double getSizeX(double latitude) {
-        double distancePerLongitude = (Math.PI / 180) * radius * Math.cos(latitude);
-        return sizeXMetres / distancePerLongitude;
-    }
-
-    private int getX(int x, int maxX, TrackPoint p1, TrackPoint p2) {
-        double distanceX = p1.getLongitude() - p2.getLongitude();
-        if (Math.abs(distanceX) >= degreesX()) {
-            int newX = pixelX(maxX) * (int) (distanceX/ degreesX());
-            if (p1.getLongitude() > p2.getLongitude())
-                x -= newX;
-            else
-                x += newX;
+        if (!waypoints.isEmpty() && converter != null) {
+            for (TrackPoint p : waypoints) {
+                Point p1 = converter.getPixel(p);
+                canvas.save();
+                canvas.drawCircle(p1.x, p1.y, 10, paint);
+                canvas.scale(scaleFactor, -scaleFactor, p1.x, p1.y);
+                canvas.drawText(p.getName(), p1.x, p1.y, paint);
+                canvas.restore();
+            }
         }
-        return x;
+
+        canvas.restore();
     }
-
-    private int getY(int y, int maxY, TrackPoint p1, TrackPoint p2) {
-        double distanceY = p1.getLatitude() - p2.getLatitude();
-        if (Math.abs(distanceY) >= degreesY()) {
-            int newY = pixelY(maxY) * (int) (distanceY/ degreesY());
-            if (p1.getLongitude() > p2.getLongitude())
-                y += newY;
-            else
-                y -= newY;
-        }
-        return y;
-    }
-
-    //metri di distanza corrispondenti alla differenza di due longitudini
-    private double longToMetres(double longitude) {
-        return (sizeXMetres * longitude) / sizeX;
-    }
-
-    //metri di distanza corrispondenti alla differenza di due latitudini
-    private double latToMetres(double latitude) {
-        return (sizeYMetres * latitude) / sizeY;
-    }
-
-    //pixel di una casella dell'asse X
-    private int pixelX(int width) {
-        return width/10;
-    }
-
-    //pixel di una casella dell'asse Y
-    private int pixelY(int height) {
-        return height/20;
-    }
-
-
-    private double getDistance(TrackPoint p1, TrackPoint p2) {
-        double lat1 = Math.toRadians(p1.getLatitude());
-        double lat2 = Math.toRadians(p2.getLatitude());
-        double deltaLat = Math.toRadians(lat2 - lat1);
-        double deltaLong = Math.toRadians(p2.getLongitude() - p1.getLongitude());
-
-        double a = (Math.sin(deltaLat/2) * Math.sin(deltaLat/2)) +
-                (Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLong/2) * Math.sin(deltaLong/2));
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return radius * c;
-    }
-
-    private double getScale() {
-        double distance = 0;
-        Iterator<TrackPoint> it = track.getTrackPoints().iterator();
-        TrackPoint p1 = it.next();
-        TrackPoint p2 = null;
-        while (it.hasNext()) {
-            p2 = it.next();
-        }
-        return getDistance(p1, p2);
-    }
-    */
-
 }

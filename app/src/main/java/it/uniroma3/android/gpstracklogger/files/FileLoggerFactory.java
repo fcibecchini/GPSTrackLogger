@@ -1,4 +1,4 @@
-package it.uniroma3.android.gpstracklogger.logger;
+package it.uniroma3.android.gpstracklogger.files;
 
 import android.os.Environment;
 
@@ -13,9 +13,9 @@ import it.uniroma3.android.gpstracklogger.model.Track;
  */
 public class FileLoggerFactory {
     private static int countFile = 0;
+    private static String directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
 
     public static GpxFileLogger getLogger(Track track) {
-        String directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
         File gpxFileFolder = new File(directory);
         if (!gpxFileFolder.exists()) {
             gpxFileFolder.mkdirs();
@@ -33,6 +33,16 @@ public class FileLoggerFactory {
         GpxFileLogger logger = new GpxFileLogger(gpxFile, track);
         EventBus.getDefault().post(new Events.Directory(directory));
         return logger;
+    }
+
+    public static GPXFileLoader getLoader(String gpxFileName) {
+        File gpx = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).toString(), gpxFileName);
+        return new GPXFileLoader(gpx);
+    }
+
+    public static void loadGpxFile(String gpxFileName) {
+        GPXFileLoader loader = getLoader(gpxFileName);
+        loader.loadGpxFile();
     }
 
     public static void write(Track track) {

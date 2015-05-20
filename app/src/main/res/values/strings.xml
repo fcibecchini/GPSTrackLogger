@@ -8,4 +8,5 @@
     <string name="draw">View Track</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_load_file">LoadFileActivity</string>
 </resources>

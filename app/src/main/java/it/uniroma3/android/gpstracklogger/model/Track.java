@@ -21,12 +21,24 @@ public class Track {
         this.trackPoints = new TreeSet<>(new TrackPointComparator());
     }
 
+    public Track(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return this.name;
     }
 
+    public void setName(String n) {
+        this.name = n;
+    }
+
     public Set<TrackPoint> getTrackPoints(){
         return this.trackPoints;
+    }
+
+    public void setTrackPoints(Set<TrackPoint> tp) {
+        this.trackPoints = tp;
     }
 
     public boolean addTrackPoint(Location loc) {

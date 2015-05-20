@@ -6,14 +6,21 @@ import java.util.Date;
  * Created by Fabio on 02/05/2015.
  */
 public class TrackPoint {
+    private String name;
     private double latitude;
     private double longitude;
     private double altitude;
     private float speed;
     private Date time;
 
-    public TrackPoint() {
+    public TrackPoint() {}
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public double getLatitude() {
