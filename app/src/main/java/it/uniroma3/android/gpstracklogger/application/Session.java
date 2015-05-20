@@ -9,7 +9,8 @@ import it.uniroma3.android.gpstracklogger.model.GPSController;
  */
 public class Session extends Application {
     private static GPSController controller;
-    private static boolean isStarted;
+    private static Converter converter;
+    private static boolean isStarted, isConverterSet;
 
     public static boolean isStarted() {
         return isStarted;
@@ -19,9 +20,27 @@ public class Session extends Application {
         Session.isStarted = started;
     }
 
+    public static boolean isConverterSet() {
+        return isConverterSet;
+    }
+
     public static GPSController getController() {
         if (controller == null)
             controller = new GPSController();
         return controller;
     }
+
+    public static Converter getConverter() {
+        if (converter == null)
+            converter = new Converter();
+        return converter;
+    }
+
+    public static void setConverter(double lon, double lat, double scala) {
+        converter.setLongitude(lon);
+        converter.setLatitude(lat);
+        converter.setScala(scala);
+        isConverterSet = true;
+    }
+
 }

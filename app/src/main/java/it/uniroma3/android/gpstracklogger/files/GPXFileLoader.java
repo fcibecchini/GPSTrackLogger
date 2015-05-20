@@ -271,7 +271,12 @@ public class GPXFileLoader {
     }
 
     private Date getDateTime(String time) throws ParseException {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss'Z'", Locale.ENGLISH);
+        String template;
+        if (time.length() == 24)
+            template = "yyyy-MM-dd'T'kk:mm:ss.SSS'Z'";
+        else
+            template = "yyyy-MM-dd'T'kk:mm:ss'Z'";
+        DateFormat format = new SimpleDateFormat(template, Locale.ENGLISH);
         Date date = format.parse(time);
         return date;
     }

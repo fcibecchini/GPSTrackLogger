@@ -12,10 +12,30 @@ public class Converter {
     private double latitude;
     private double scala;
 
-    public Converter(double lon, double lat, double s) {
-        this.longitude = lon;
-        this.latitude = lat;
-        this.scala = s;
+    public Converter() {}
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getScala() {
+        return scala;
+    }
+
+    public void setScala(double scala) {
+        this.scala = scala;
     }
 
     public Point getPixel(TrackPoint tp) {

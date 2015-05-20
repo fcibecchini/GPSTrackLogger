@@ -24,17 +24,19 @@ public class DrawView extends View {
     private List<Track> imported;
     private List<TrackPoint> waypoints;
     private Converter converter;
-    private double scala = 1000000; // 10 m
+    private double scala = 100000; // 10 m
     Paint paint = new Paint();
     private float scaleFactor;
     private int xc, yc;
+    private final int[] colors = {-16777216,-16776961,-16711681,
+            -12303292,-7829368,-16711936,-3355444,-65281,-65536,-256};
 
     public DrawView(Context context) {
         super(context);
-        paint.setColor(Color.BLACK);
         paint.setStrokeWidth(4);
         paint.setTextSize(30);
         scaleFactor = 1f;
+        converter = Session.getConverter();
         current = Session.getController().getCurrentTrack();
         imported = Session.getController().getImportedTracks();
         waypoints = Session.getController().getWaypoints();
@@ -55,13 +57,16 @@ public class DrawView extends View {
         if (Session.isStarted()) {
             Set<TrackPoint> currentPoints = current.getTrackPoints();
             if (currentPoints.size() > 1) {
+                paint.setColor(colors[0]);
                 Iterator<TrackPoint> iterator = currentPoints.iterator();
                 TrackPoint t1 = iterator.next();
-                if (converter == null)
-                    converter = new Converter(t1.getLongitude(), t1.getLatitude(), scala);
                 TrackPoint t2 = iterator.next();
+                if (!Session.isConverterSet()) {
+                    Session.setConverter(t1.getLongitude(), t1.getLatitude(), scala);
+                }
+                Point p0 = converter.getPixel(t1);
                 Point p1 = converter.getPixel(t2);
-                canvas.drawLine(0, 0, p1.x, p1.y, paint);
+                canvas.drawLine(p0.x, p0.y, p1.x, p1.y, paint);
                 while (iterator.hasNext()) {
                     Point p2 = converter.getPixel(iterator.next());
                     canvas.drawLine(p1.x, p1.y, p2.x, p2.y, paint);
@@ -70,25 +75,30 @@ public class DrawView extends View {
             }
         }
         if (!imported.isEmpty()) {
+            int i = 1;
             for (Track track : imported) {
+                paint.setColor(colors[i]);
                 if (!track.getTrackPoints().isEmpty()) {
                     Iterator<TrackPoint> iterator = track.getTrackPoints().iterator();
                     TrackPoint t1 = iterator.next();
-                    if (converter == null)
-                        converter = new Converter(t1.getLongitude(), t1.getLatitude(), scala);
                     TrackPoint t2 = iterator.next();
+                    if (!Session.isConverterSet()) {
+                        Session.setConverter(t1.getLongitude(), t1.getLatitude(), scala);
+                    }
+                    Point p0 = converter.getPixel(t1);
                     Point p1 = converter.getPixel(t2);
-                    canvas.drawLine(0, 0, p1.x, p1.y, paint);
+                    canvas.drawLine(p0.x, p0.y, p1.x, p1.y, paint);
                     while (iterator.hasNext()) {
                         Point p2 = converter.getPixel(iterator.next());
                         canvas.drawLine(p1.x, p1.y, p2.x, p2.y, paint);
                         p1 = p2;
                     }
                 }
+                i = (i==colors.length) ? 1 : i+1;
             }
         }
 
-        if (!waypoints.isEmpty() && converter != null) {
+        if (!waypoints.isEmpty() && Session.isConverterSet()) {
             for (TrackPoint p : waypoints) {
                 Point p1 = converter.getPixel(p);
                 canvas.save();
