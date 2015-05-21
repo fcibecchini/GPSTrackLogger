@@ -14,7 +14,7 @@ import it.uniroma3.android.gpstracklogger.views.DrawView;
 public class StartDrawActivity extends Activity {
     private DrawView drawView;
     ViewGroup root;
-    private int dx, dy;
+    private float lastX, lastY;
     private ScaleGestureDetector mScaleDetector;
 
     @Override
@@ -32,32 +32,39 @@ public class StartDrawActivity extends Activity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        mScaleDetector.onTouchEvent(event);
-        final int X = (int) event.getRawX();
-        final int Y = (int) event.getRawY();
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN: {
-                FrameLayout.LayoutParams lParams = (FrameLayout.LayoutParams) drawView.getLayoutParams();
-                dx = X - lParams.leftMargin;
-                dy = Y - lParams.topMargin;
+        if (event.getPointerCount() > 1) {
+
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    final float x = event.getX();
+                    final float y = event.getY();
+                    drawView.setZoomCanvas(x, y);
+                }
+                drawView.invalidate();
             }
-            break;
-            case MotionEvent.ACTION_UP:
+            mScaleDetector.onTouchEvent(event);
+        }
+        else {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    final float x = event.getX();
+                    final float y = event.getY();
+                    lastX = x;
+                    lastY = y;
+                }
                 break;
-            case MotionEvent.ACTION_POINTER_DOWN:
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                break;
-            case MotionEvent.ACTION_MOVE: {
-                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) drawView.getLayoutParams();
-                layoutParams.leftMargin = X - dx;
-                layoutParams.topMargin = Y - dy;
-                drawView.setLayoutParams(layoutParams);
-                break;
+                case MotionEvent.ACTION_MOVE: {
+                    final float x = event.getX();
+                    final float y = event.getY();
+                    drawView.translateCanvas(x-lastX, y-lastY);
+                    break;
+                }
             }
+            drawView.invalidate();
         }
         return true;
     }
+
 
     private class ScaleListener
             extends ScaleGestureDetector.SimpleOnScaleGestureListener {
