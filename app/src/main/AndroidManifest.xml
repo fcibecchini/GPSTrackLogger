@@ -40,6 +40,24 @@
         <activity
             android:name=".LoadFileActivity"
             android:label="@string/title_activity_load_file" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="it.uniroma3.android.gpstracklogger.GPSMainActivity" />
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="it.uniroma3.android.gpstracklogger.GPSMainActivity" />
+        </activity>
+        <activity
+            android:name=".LocDetailsActivity"
+            android:label="@string/title_activity_loc_details"
+            android:parentActivityName=".GPSMainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="it.uniroma3.android.gpstracklogger.GPSMainActivity" />
         </activity>
     </application>
 

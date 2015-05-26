@@ -2,8 +2,10 @@ package it.uniroma3.android.gpstracklogger;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import de.greenrobot.event.EventBus;
+import it.uniroma3.android.gpstracklogger.application.AppSettings;
 import it.uniroma3.android.gpstracklogger.events.Events;
 import it.uniroma3.android.gpstracklogger.application.Session;
 import it.uniroma3.android.gpstracklogger.service.GPSLoggingService;
@@ -18,17 +21,26 @@ import java.util.Date;
 
 public class GPSMainActivity extends Activity {
     private Intent serviceIntent;
+    private Button start,stop,draw,load,prefs,locDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gpsmain);
+        setDefaultSettings();
+        loadSettings();
         RegisterEventBus();
         startService();
-        Button start = (Button) findViewById(R.id.startButton);
-        Button stop = (Button) findViewById(R.id.stopButton);
-        Button draw = (Button) findViewById(R.id.draw);
-        Button load = (Button) findViewById(R.id.loadtrack);
+        start = (Button) findViewById(R.id.startButton);
+        stop = (Button) findViewById(R.id.stopButton);
+        draw = (Button) findViewById(R.id.draw);
+        load = (Button) findViewById(R.id.loadtrack);
+        prefs = (Button) findViewById(R.id.prefs);
+        locDetails = (Button) findViewById(R.id.locdetails);
+        if (!Session.isStarted()) {
+            stop.setEnabled(false);
+            locDetails.setEnabled(false);
+        }
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -39,6 +51,12 @@ public class GPSMainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 stopClick();
+            }
+        });
+        locDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detailsClick();
             }
         });
         draw.setOnClickListener(new View.OnClickListener() {
@@ -53,6 +71,13 @@ public class GPSMainActivity extends Activity {
                 loadClick();
             }
         });
+        prefs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prefClick();
+            }
+        });
+
     }
 
     private void RegisterEventBus() {
@@ -67,8 +92,83 @@ public class GPSMainActivity extends Activity {
         }
     }
 
-    private void scheduleWriting(){
-        Session.getController().scheduleWriting();
+    private void setDefaultSettings() {
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+    }
+
+    private void loadSettings() {
+        AppSettings.loadSettings(this);
+    }
+
+    public void startClick() {
+        if (!Session.isStarted()) {
+            stop.setEnabled(true);
+            locDetails.setEnabled(true);
+            start.setEnabled(false);
+            setTextViewValue(R.id.notice, "Tracking...");
+            startLogging();
+            Session.getController().scheduleWriting();
+        }
+    }
+
+    public void stopClick() {
+        if (Session.isStarted()) {
+            stop.setEnabled(false);
+            locDetails.setEnabled(false);
+            start.setEnabled(true);
+            Session.getController().stopWriting();
+            stopLogging();
+        }
+    }
+
+    public void drawClick() {
+        Intent draw = new Intent(this, StartDrawActivity.class);
+        startActivity(draw);
+    }
+
+    public void loadClick() {
+        Intent load = new Intent(this, LoadFileActivity.class);
+        startActivity(load);
+    }
+
+    public void prefClick() {
+        Intent set = new Intent(this, SettingsActivity.class);
+        startActivity(set);
+    }
+
+    public void detailsClick() {
+        Intent det = new Intent(this, LocDetailsActivity.class);
+        startActivity(det);
+    }
+
+    private void startLogging() {
+        EventBus.getDefault().post(new Events.Start());
+    }
+
+    private void stopLogging() {
+        EventBus.getDefault().post(new Events.Stop());
+    }
+
+    public void onEventMainThread(Events.Directory dir) {
+        setTextViewValue(R.id.notice, "Saved in:" + dir.directory);
+    }
+
+    private void setTextViewValue(int textViewId, String value) {
+        TextView textView = (TextView) findViewById(textViewId);
+        textView.setText(value);
+    }
+
+    private void startService() {
+        serviceIntent = new Intent(this, GPSLoggingService.class);
+        startService(serviceIntent);
+    }
+
+    private void stopService() {
+        try {
+            stopService(serviceIntent);
+        } catch (Exception e) {
+            setTextViewValue(R.id.notice, "could not stop service");
+        }
     }
 
     @Override
@@ -91,95 +191,6 @@ public class GPSMainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void startClick() {
-        if (!Session.isStarted()) {
-            setTextViewValue(R.id.notice, "Tracking...");
-            scheduleWriting();
-            startLogging();
-        }
-        else
-            setTextViewValue(R.id.notice, "Already tracking");
-    }
-
-    private void stopClick() {
-        if (Session.isStarted()) {
-            stopLogging();
-            setTextViewValue(R.id.timestamp, "");
-            setTextViewValue(R.id.latitude, "");
-            setTextViewValue(R.id.longitude, "");
-            setTextViewValue(R.id.speed, "");
-            setTextViewValue(R.id.altitude, "");
-        }
-        else
-            setTextViewValue(R.id.notice, "Already stopped");
-    }
-
-    private void drawClick() {
-        Intent draw = new Intent(this, StartDrawActivity.class);
-        startActivity(draw);
-    }
-
-    private void loadClick() {
-        Intent load = new Intent(this, LoadFileActivity.class);
-        startActivity(load);
-    }
-
-    private void startLogging() {
-        EventBus.getDefault().post(new Events.Start());
-    }
-
-    private void stopLogging() {
-        EventBus.getDefault().post(new Events.Stop());
-    }
-
-
-    public void onEventMainThread(Events.LocationUpdate locationEvent){
-        displayLocationInfo(locationEvent.location);
-    }
-
-    public void onEventMainThread(Events.Message message) {
-        setTextViewValue(message.id, message.info);
-    }
-
-    public void onEventMainThread(Events.Directory dir) {
-        setTextViewValue(R.id.notice, "Saved in:" + dir.directory);
-    }
-
-    private void displayLocationInfo(Location location) {
-        Date timestamp = new Date(location.getTime());
-        setTextViewValue(R.id.timestamp, timestamp.toString());
-        double latitude = location.getLatitude();
-        setTextViewValue(R.id.latitude, String.valueOf(latitude));
-        double longitude = location.getLongitude();
-        setTextViewValue(R.id.longitude, String.valueOf(longitude));
-        if (location.hasAltitude()) {
-            double altitude = location.getAltitude();
-            setTextViewValue(R.id.altitude, String.valueOf(altitude));
-        }
-        if (location.hasSpeed()) {
-            float speed = location.getSpeed();
-            setTextViewValue(R.id.speed, String.valueOf(speed));
-        }
-    }
-
-    private void setTextViewValue(int textViewId, String value) {
-        TextView textView = (TextView) findViewById(textViewId);
-        textView.setText(value);
-    }
-
-    private void startService() {
-        serviceIntent = new Intent(this, GPSLoggingService.class);
-        startService(serviceIntent);
-    }
-
-    private void stopService() {
-        try {
-            stopService(serviceIntent);
-        } catch (Exception e) {
-            setTextViewValue(R.id.notice, "could not stop service");
-        }
     }
 
     @Override

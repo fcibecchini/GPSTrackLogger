@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import it.uniroma3.android.gpstracklogger.application.AppSettings;
 import it.uniroma3.android.gpstracklogger.files.FileLoggerFactory;
 
 /**
@@ -15,14 +17,22 @@ import it.uniroma3.android.gpstracklogger.files.FileLoggerFactory;
  */
 public class GPSController {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private final Runnable writer;
+    private ScheduledFuture<?> writerHandle;
     private Track currentTrack;
     private List<Track> importedTracks;
     private List<TrackPoint> waypoints;
 
     public GPSController() {
-        this.currentTrack = new Track();
         this.importedTracks = new ArrayList<>();
         this.waypoints = new ArrayList<>();
+        this.writer = new Runnable() {
+            public void run() { writeToFile(false); }
+        };
+    }
+
+    public void setCurrentTrack() {
+        this.currentTrack = new Track();
     }
 
     public Track getCurrentTrack() {
@@ -52,12 +62,11 @@ public class GPSController {
     }
 
     public void scheduleWriting() {
-        scheduler.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                writeToFile(false);
-            }
-        }, 10, 10, TimeUnit.MINUTES);
+        writerHandle = scheduler.scheduleAtFixedRate(writer, AppSettings.getInitialDelay(), AppSettings.getPeriod(), TimeUnit.MINUTES);
+    }
+
+    public void stopWriting() {
+        writerHandle.cancel(true);
     }
 
     public void writeToFile(boolean stop) {

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Measure Mode">
+
+        <ListPreference
+            android:title="Minimun time"
+            android:summary="the min time to track"
+            android:key="minTime"
+            android:entries="@array/minTimes"
+            android:entryValues="@array/minTimesValues"
+            android:defaultValue="60" />
+
+        <ListPreference
+            android:title="Minimun distance"
+            android:summary="the min distance to track"
+            android:key="minDistance"
+            android:entries="@array/minDistances"
+            android:entryValues="@array/minDistancesValues"
+            android:defaultValue="15" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Auto Save">
+
+        <EditTextPreference
+            android:title="First Save in minutes"
+            android:summary="first time to save track"
+            android:key="initialDelay"
+            android:inputType="number"
+            android:defaultValue="10" />
+
+        <EditTextPreference
+            android:title="Save Period in minutes"
+            android:summary="period save track"
+            android:key="period"
+            android:inputType="number"
+            android:defaultValue="10" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Map Settings">
+
+        <CheckBoxPreference
+            android:title="Show Lat Bar"
+            android:summary="show the latitude bar"
+            android:key="latitudeBar"
+            android:defaultValue="true" />
+        <CheckBoxPreference
+            android:title="Show Lon Bar"
+            android:summary="show the longitude bar"
+            android:key="longitudeBar"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

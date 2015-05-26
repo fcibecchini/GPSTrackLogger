@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,147 +14,71 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.02"
         android:text="@string/start"
-        android:id="@+id/startButton" />
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/startButton"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.02"
         android:text="@string/stop"
-        android:id="@+id/stopButton" />
-
-    <ScrollView
-        android:layout_width="293dp"
-        android:layout_height="133dp"
-        android:layout_weight="0.38">
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TableRow android:padding="5px">
-                <TextView
-                    android:text="Provider"
-                    android:padding="5px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/provider"
-                    android:padding="5px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-            <TableRow android:padding="5px">
-                <TextView
-                    android:text="Disponibile"
-                    android:padding="5px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/available"
-                    android:padding="5px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-            <TableRow android:padding="5px">
-                <TextView
-                    android:text="Abilitato"
-                    android:padding="5px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/enabled"
-                    android:padding="5px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-            <TableRow android:padding="5px">
-                <TextView
-                    android:text="Timestamp"
-                    android:padding="5px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/timestamp"
-                    android:padding="5px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-            <TableRow android:padding="5px">
-                <TextView
-                    android:text="Latitudine"
-                    android:padding="5px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/latitude"
-                    android:padding="5px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-            <TableRow android:padding="5px">
-                <TextView
-                    android:text="Longitudine"
-                    android:padding="5px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/longitude"
-                    android:padding="5px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-            <TableRow android:padding="5px">
-                <TextView
-                    android:text="Altitudine"
-                    android:padding="5px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/altitude"
-                    android:padding="5px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-            <TableRow android:padding="5px">
-                <TextView
-                    android:text="Velocità"
-                    android:padding="5px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/speed"
-                    android:padding="5px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </TableRow>
-        </TableLayout>
-    </ScrollView>
+        android:id="@+id/stopButton"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/startButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
-        android:layout_width="315dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/draw"
         android:id="@+id/draw"
-        android:clickable="false"
-        android:layout_weight="0.02" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/loadtrack" />
 
     <TextView
-        android:layout_width="287dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/notice"
         android:enabled="false"
-        android:layout_weight="0.10" />
+        android:layout_below="@+id/prefs"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Load Track"
         android:id="@+id/loadtrack"
-        android:layout_weight="0.02" />
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/locdetails"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:id="@+id/prefs"
+        android:layout_below="@+id/draw"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Location Details"
+        android:id="@+id/locdetails"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/stopButton" />
 
 
-</LinearLayout>
+</RelativeLayout>

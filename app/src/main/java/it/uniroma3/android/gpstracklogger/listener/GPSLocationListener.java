@@ -5,7 +5,6 @@ import android.location.LocationListener;
 import android.location.LocationProvider;
 import android.os.Bundle;
 
-import it.uniroma3.android.gpstracklogger.R;
 import it.uniroma3.android.gpstracklogger.service.GPSLoggingService;
 
 /**
@@ -22,9 +21,8 @@ public class GPSLocationListener implements LocationListener {
     public void onLocationChanged(Location location) {
         try {
             if (location != null) {
-                gpsLoggingService.sendMessage(R.id.provider, "GPS");
-                gpsLoggingService.sendMessage(R.id.enabled, "TRUE");
-                gpsLoggingService.sendMessage(R.id.available, "TRUE");
+                gpsLoggingService.gpsEnabled(true);
+                gpsLoggingService.gpsAvailable(true);
                 gpsLoggingService.onLocationChanged(location);
             }
         }
@@ -36,22 +34,22 @@ public class GPSLocationListener implements LocationListener {
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         if (status == LocationProvider.AVAILABLE)
-            gpsLoggingService.sendMessage(R.id.available, "TRUE");
+            gpsLoggingService.gpsAvailable(true);
         else {
-            gpsLoggingService.sendMessage(R.id.available, "FALSE");
+            gpsLoggingService.gpsAvailable(false);
             gpsLoggingService.restartGPSManager();
         }
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-        gpsLoggingService.sendMessage(R.id.enabled, "TRUE");
+        gpsLoggingService.gpsEnabled(true);
         gpsLoggingService.restartGPSManager();
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        gpsLoggingService.sendMessage(R.id.enabled, "FALSE");
+        gpsLoggingService.gpsEnabled(false);
         gpsLoggingService.restartGPSManager();
     }
 

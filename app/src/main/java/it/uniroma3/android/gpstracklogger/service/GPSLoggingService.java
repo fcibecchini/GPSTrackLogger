@@ -7,6 +7,7 @@ import android.location.LocationManager;
 import android.os.IBinder;
 
 import de.greenrobot.event.EventBus;
+import it.uniroma3.android.gpstracklogger.application.AppSettings;
 import it.uniroma3.android.gpstracklogger.events.Events;
 import it.uniroma3.android.gpstracklogger.application.Session;
 import it.uniroma3.android.gpstracklogger.listener.GPSLocationListener;
@@ -66,7 +67,8 @@ public class GPSLoggingService extends Service {
             gpsLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
             gpsLocationListener = new GPSLocationListener(this);
         }
-        gpsLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, gpsLocationListener);
+        if (Session.isStarted())
+            gpsLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, AppSettings.getMinTime(), AppSettings.getMinDistance(), gpsLocationListener);
     }
 
     public void stopGPSManager() {
@@ -79,12 +81,15 @@ public class GPSLoggingService extends Service {
     public void onLocationChanged(Location location) {
         if (Session.isStarted()) {
             Session.getController().addTrackPoint(location);
-            EventBus.getDefault().post(new Events.LocationUpdate(location));
         }
     }
 
-    public void sendMessage(int id, String message) {
-        EventBus.getDefault().post(new Events.Message(id, message));
+    public void gpsEnabled(boolean enabled) {
+        Session.setProviderEnabled(enabled);
+    }
+
+    public void gpsAvailable(boolean available) {
+        Session.setProviderAvailable(available);
     }
 
     public void onEvent(Events.Stop stop) {
@@ -97,6 +102,7 @@ public class GPSLoggingService extends Service {
 
     private void startLogging() {
         Session.setStarted(true);
+        Session.getController().setCurrentTrack();
         startGPSManager();
     }
 

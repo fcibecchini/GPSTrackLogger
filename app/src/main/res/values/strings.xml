@@ -1,12 +1,55 @@
 <resources>
     <string name="app_name">GPS Track Logger</string>
 
-    <string name="start">Start Logging</string>
-    <string name="stop">Stop Logging</string>
+    <string name="start">Start search</string>
+    <string name="stop">Stop search</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_start_draw">StartDraw</string>
     <string name="draw">View Track</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="title_activity_load_file">LoadFileActivity</string>
+
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <string name="prefs_measure">Measure Mode</string>
+    <string name="prefs_autosave">Auto Save</string>
+    <string name="prefs_location">Salve Location</string>
+    <string name="prefs_mapsettings">Map Settings</string>
+
+    <string-array name="minTimes">
+        <item>1 min</item>
+        <item>10 min</item>
+        <item>30 min</item>
+        <item>1 hour</item>
+    </string-array>
+
+    <string-array name="minTimesValues">
+        <item>60</item>
+        <item>600</item>
+        <item>1800</item>
+        <item>3600</item>
+    </string-array>
+
+    <string-array name="minDistances">
+        <item>None</item>
+        <item>15m</item>
+        <item>30m</item>
+        <item>50m</item>
+        <item>70m</item>
+    </string-array>
+
+    <string-array name="minDistancesValues">
+        <item>0</item>
+        <item>15</item>
+        <item>30</item>
+        <item>50</item>
+        <item>70</item>
+    </string-array>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_loc_details">LocDetailsActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+
 </resources>
