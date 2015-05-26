@@ -5,6 +5,7 @@ import android.os.Environment;
 import java.io.File;
 
 import de.greenrobot.event.EventBus;
+import it.uniroma3.android.gpstracklogger.application.AppSettings;
 import it.uniroma3.android.gpstracklogger.events.Events;
 import it.uniroma3.android.gpstracklogger.model.Track;
 
@@ -13,7 +14,7 @@ import it.uniroma3.android.gpstracklogger.model.Track;
  */
 public class FileLoggerFactory {
     private static int countFile = 0;
-    private static String directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+    private static String directory = AppSettings.getDirectory();
 
     public static GpxFileLogger getLogger(Track track) {
         File gpxFileFolder = new File(directory);
@@ -36,7 +37,7 @@ public class FileLoggerFactory {
     }
 
     public static GPXFileLoader getLoader(String gpxFileName) {
-        File gpx = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).toString(), gpxFileName);
+        File gpx = new File(directory, gpxFileName);
         return new GPXFileLoader(gpx);
     }
 

@@ -14,7 +14,7 @@ public class Session extends Application {
     private static GPSController controller;
     private static Converter converter;
     private static boolean isStarted, isConverterSet;
-    private static boolean providerEnabled, providerAvailable;
+    private static boolean providerEnabled, providerAvailable, locationChanged;
 
     public static boolean isStarted() {
         return isStarted;
@@ -60,5 +60,13 @@ public class Session extends Application {
 
     public static void setProviderAvailable(boolean providerAvailable) {
         Session.providerAvailable = providerAvailable;
+    }
+
+    public static boolean isLocationChanged() {
+        return locationChanged;
+    }
+
+    public static void setLocationChanged(boolean locationChanged) {
+        Session.locationChanged = locationChanged;
     }
 }

@@ -81,6 +81,7 @@ public class GPSLoggingService extends Service {
     public void onLocationChanged(Location location) {
         if (Session.isStarted()) {
             Session.getController().addTrackPoint(location);
+            Session.setLocationChanged(true);
         }
     }
 
@@ -108,6 +109,7 @@ public class GPSLoggingService extends Service {
 
     private void stopLogging() {
         Session.setStarted(false);
+        Session.setLocationChanged(false);
         stopGPSManager();
         saveTrack(true);
     }

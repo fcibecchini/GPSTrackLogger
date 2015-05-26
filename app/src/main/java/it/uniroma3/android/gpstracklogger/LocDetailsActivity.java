@@ -28,24 +28,13 @@ public class LocDetailsActivity extends Activity {
     }
 
     private void setDisplay() {
-        displayProviderInfo();
+        if (Session.isLocationChanged())
+            displayProviderInfo();
         TreeSet<TrackPoint> trackPoints = null;
         if (Session.getController().getCurrentTrack() != null)
             trackPoints = (TreeSet) Session.getController().getCurrentTrack().getTrackPoints();
         if (!trackPoints.isEmpty())
             displayLocationInfo(trackPoints.last());
-        if (!Session.isStarted())
-            clean();
-    }
-
-    private void clean() {
-        setTextViewValue(R.id.available, "");
-        setTextViewValue(R.id.enabled, "");
-        setTextViewValue(R.id.timestamp, "");
-        setTextViewValue(R.id.latitude, "");
-        setTextViewValue(R.id.longitude, "");
-        setTextViewValue(R.id.speed, "");
-        setTextViewValue(R.id.altitude, "");
     }
 
     private void displayProviderInfo() {

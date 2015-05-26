@@ -10,12 +10,13 @@ import android.os.Bundle;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import it.uniroma3.android.gpstracklogger.application.AppSettings;
 import it.uniroma3.android.gpstracklogger.files.FileLoggerFactory;
 
 
 public class LoadFileActivity extends Activity {
     private String[] mFileList;
-    private File mPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).toString());
+    private File mPath = new File(AppSettings.getDirectory());
     private String mChosenFile;
     private static final String FTYPE = ".gpx";
     private static final int DIALOG_LOAD_FILE = 1000;

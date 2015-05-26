@@ -3,6 +3,7 @@ package it.uniroma3.android.gpstracklogger.application;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 
 /**
@@ -12,6 +13,7 @@ public class AppSettings extends Application {
     private static int minTime, minDistance, initialDelay, period;
     private static SharedPreferences preferences;
     private static boolean latitudeBar, longitudeBar;
+    private static String directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString();
 
     public static int getMinTime() {
         return minTime;
@@ -59,6 +61,14 @@ public class AppSettings extends Application {
 
     public static void setLongitudeBar(boolean longitudeBar) {
         AppSettings.longitudeBar = longitudeBar;
+    }
+
+    public static String getDirectory() {
+        return directory;
+    }
+
+    public static void setDirectory(String directory) {
+        AppSettings.directory = directory;
     }
 
     public static void loadSettings(Context context) {
