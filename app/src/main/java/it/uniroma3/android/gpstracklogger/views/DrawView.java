@@ -37,10 +37,6 @@ public class DrawView extends View {
         waypoints = Session.getController().getWaypoints();
     }
 
-    public int getScalaMetri() {
-        return (int) ((1/converter.getScala())*100);
-    }
-
     public void setScala(double factor) {
         double scala = converter.getScala()*factor;
         converter.setScala(scala);
@@ -122,6 +118,12 @@ public class DrawView extends View {
             Point p = converter.getPixel(max);
             int x = Math.abs(p.x);
             int y = Math.abs(p.y);
+            while (x < xc && y < yc) {
+                setScala(2);
+                p = converter.getPixel(max);
+                x = Math.abs(p.x);
+                y = Math.abs(p.y);
+            }
             while (x > xc || y > yc) {
                 setScala(0.5);
                 p = converter.getPixel(max);
