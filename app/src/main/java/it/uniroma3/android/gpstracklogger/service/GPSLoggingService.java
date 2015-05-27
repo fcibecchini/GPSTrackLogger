@@ -56,7 +56,7 @@ public class GPSLoggingService extends Service {
     }
 
     public void restartGPSManager() {
-        saveTrack(false);
+        //saveTrack(false);
         stopGPSManager();
         startGPSManager();
     }

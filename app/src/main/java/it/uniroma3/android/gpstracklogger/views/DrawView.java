@@ -19,6 +19,7 @@ import it.uniroma3.android.gpstracklogger.model.TrackPoint;
 
 public class DrawView extends View {
     private Track current;
+    private boolean set;
     private List<Track> imported;
     private List<TrackPoint> waypoints;
     private Converter converter;
@@ -66,8 +67,11 @@ public class DrawView extends View {
     }
 
     private void initDraw(Canvas canvas) {
-        xc = canvas.getWidth() / 2;
-        yc = canvas.getHeight() / 2;
+        if (!set) {
+            xc = canvas.getWidth() / 2;
+            yc = canvas.getHeight() / 2;
+            set = true;
+        }
         canvas.translate(xc, yc);
         canvas.scale(1, -1);
     }
@@ -131,6 +135,10 @@ public class DrawView extends View {
                 y = Math.abs(p.y);
             }
         }
+    }
+
+    public void restoreScale() {
+        converter.setScala(1);
     }
 
     public TrackPoint max() {

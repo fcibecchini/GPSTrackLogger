@@ -29,6 +29,7 @@ public class StartDrawActivity extends Activity {
         showScala();
         Button fit = (Button) findViewById(R.id.fit);
         ZoomControls zoom = (ZoomControls) findViewById(R.id.zoomControls);
+        Button restore = (Button) findViewById(R.id.restore);
         fit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,6 +48,12 @@ public class StartDrawActivity extends Activity {
                 zoomOut();
             }
         });
+        restore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                restoreScale();
+            }
+        });
     }
 
     @Override
@@ -57,6 +64,12 @@ public class StartDrawActivity extends Activity {
 
     private void fit() {
         drawView.fit();
+        drawView.invalidate();
+        showScala();
+    }
+
+    private void restoreScale() {
+        drawView.restoreScale();
         drawView.invalidate();
         showScala();
     }

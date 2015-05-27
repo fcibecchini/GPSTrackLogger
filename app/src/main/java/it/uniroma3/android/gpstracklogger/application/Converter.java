@@ -15,7 +15,6 @@ public class Converter {
     private double scala;
 
     public Converter() {
-        //this.scala = 200000; // 50 metri ogni 100 px
         this.scala = 1; // 1 metro/px
     }
 
@@ -42,12 +41,6 @@ public class Converter {
     public void setScala(double scala) {
         this.scala = scala;
     }
-
-/*    public Point getPixel(TrackPoint tp) {
-        int x = (int) ((tp.getLongitude() - longitude) * scala);
-        int y = (int) ((tp.getLatitude() - latitude) * scala);
-        return new Point(x, y);
-    }*/
 
     public Point getPixel(TrackPoint tp) {
         float[] result = new float[1];

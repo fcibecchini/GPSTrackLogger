@@ -21,7 +21,7 @@ import java.util.Date;
 
 public class GPSMainActivity extends Activity {
     private Intent serviceIntent;
-    private Button start,stop,draw,load,prefs,locDetails;
+    private Button start,stop,locDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,53 +31,7 @@ public class GPSMainActivity extends Activity {
         loadSettings();
         RegisterEventBus();
         startService();
-        start = (Button) findViewById(R.id.startButton);
-        stop = (Button) findViewById(R.id.stopButton);
-        draw = (Button) findViewById(R.id.draw);
-        load = (Button) findViewById(R.id.loadtrack);
-        prefs = (Button) findViewById(R.id.prefs);
-        locDetails = (Button) findViewById(R.id.locdetails);
-        if (!Session.isStarted()) {
-            stop.setEnabled(false);
-            locDetails.setEnabled(false);
-        }
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startClick();
-            }
-        });
-        stop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopClick();
-            }
-        });
-        locDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                detailsClick();
-            }
-        });
-        draw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawClick();
-            }
-        });
-        load.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadClick();
-            }
-        });
-        prefs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                prefClick();
-            }
-        });
-
+        loadButtons();
     }
 
     private void RegisterEventBus() {
@@ -169,6 +123,55 @@ public class GPSMainActivity extends Activity {
         } catch (Exception e) {
             setTextViewValue(R.id.notice, "could not stop service");
         }
+    }
+
+    private void loadButtons() {
+        start = (Button) findViewById(R.id.startButton);
+        stop = (Button) findViewById(R.id.stopButton);
+        Button draw = (Button) findViewById(R.id.draw);
+        Button load = (Button) findViewById(R.id.loadtrack);
+        Button prefs = (Button) findViewById(R.id.prefs);
+        locDetails = (Button) findViewById(R.id.locdetails);
+        if (!Session.isStarted()) {
+            stop.setEnabled(false);
+            locDetails.setEnabled(false);
+        }
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startClick();
+            }
+        });
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopClick();
+            }
+        });
+        locDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detailsClick();
+            }
+        });
+        draw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawClick();
+            }
+        });
+        load.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadClick();
+            }
+        });
+        prefs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prefClick();
+            }
+        });
     }
 
     @Override
