@@ -10,19 +10,19 @@ android:id="@+id/activitylayout"
     android:layout_height="match_parent"
     android:id="@+id/drawlayout"
         android:background="#ffffffff"
-        android:layout_below="@+id/fit"
-        android:layout_alignParentBottom="true">
+        android:layout_above="@+id/zoomControls">
 
         <RelativeLayout
-            android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_width="800dp"
+            android:layout_height="800dp"
             android:id="@+id/drawscale"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentTop="true">
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true">
+
         </RelativeLayout>
     </RelativeLayout>
 
@@ -31,16 +31,16 @@ android:id="@+id/activitylayout"
         android:layout_height="wrap_content"
         android:text="Fit"
         android:id="@+id/fit"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/drawlayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <ZoomControls
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/zoomControls"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
