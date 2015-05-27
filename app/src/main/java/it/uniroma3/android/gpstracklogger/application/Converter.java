@@ -69,26 +69,8 @@ public class Converter {
     }
 
     public TrackPoint getTrackPoint(Point p) {
-        double degreeLatLenght = 111000;
-        double degreeLonLenght = 0;
-        if (latitude >= 0 && latitude <15) {
-            degreeLonLenght = 111320;
-        }
-        else if (latitude >= 15 && latitude <30) {
-            degreeLonLenght = 107550;
-        }
-        else if (latitude >= 30 && latitude <45) {
-            degreeLonLenght = 96486;
-        }
-        else if (latitude >= 45 && latitude <60) {
-            degreeLonLenght = 78847;
-        }
-        else if (latitude >= 60 && latitude <75) {
-            degreeLonLenght = 55800;
-        }
-        else if (latitude >= 75 && latitude <90) {
-            degreeLonLenght = 28902;
-        }
+        double degreeLatLenght = 111111;
+        double degreeLonLenght = degreeLatLenght * Math.cos(Math.toRadians(latitude));
         double lon = p.x/(degreeLonLenght*scala);
         double lat = p.y/(degreeLatLenght*scala);
         TrackPoint tp = new TrackPoint();
