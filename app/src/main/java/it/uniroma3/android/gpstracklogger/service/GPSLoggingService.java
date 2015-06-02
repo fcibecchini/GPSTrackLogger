@@ -68,7 +68,7 @@ public class GPSLoggingService extends Service {
             gpsLocationListener = new GPSLocationListener(this);
         }
         if (Session.isStarted())
-            gpsLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, AppSettings.getMinTime(), AppSettings.getMinDistance(), gpsLocationListener);
+            gpsLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, AppSettings.getMinTime()*1000, AppSettings.getMinDistance(), gpsLocationListener);
     }
 
     public void stopGPSManager() {

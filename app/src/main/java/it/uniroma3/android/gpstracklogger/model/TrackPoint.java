@@ -1,5 +1,7 @@
 package it.uniroma3.android.gpstracklogger.model;
 
+import android.location.Location;
+
 import java.util.Date;
 
 /**
@@ -11,6 +13,7 @@ public class TrackPoint {
     private double longitude;
     private double altitude;
     private float speed;
+    private String desc;
     private Date time;
 
     public TrackPoint() {}
@@ -69,6 +72,28 @@ public class TrackPoint {
 
     public boolean hasSpeed() {
         return this.speed != 0;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public boolean hasDesc() {
+        return this.desc!=null;
+    }
+
+    public float distanceTo(TrackPoint t2) {
+        Location l1 = new Location("l1");
+        Location l2 = new Location("l2");
+        l1.setLatitude(this.getLatitude());
+        l1.setLongitude(this.getLongitude());
+        l2.setLatitude(t2.getLatitude());
+        l2.setLongitude(t2.getLongitude());
+        return l1.distanceTo(l2);
     }
 
     @Override

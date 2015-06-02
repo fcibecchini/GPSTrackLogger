@@ -1,31 +1,70 @@
 package it.uniroma3.android.gpstracklogger;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.os.Environment;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewPropertyAnimator;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.List;
 
 import it.uniroma3.android.gpstracklogger.application.AppSettings;
+import it.uniroma3.android.gpstracklogger.application.Session;
 import it.uniroma3.android.gpstracklogger.files.FileLoggerFactory;
 
-
 public class LoadFileActivity extends Activity {
-    private String[] mFileList;
     private File mPath = new File(AppSettings.getDirectory());
-    private String mChosenFile;
     private static final String FTYPE = ".gpx";
-    private static final int DIALOG_LOAD_FILE = 1000;
+    private String chosenFile;
+    private List<String> list;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadFileList();
-        onCreateDialog(DIALOG_LOAD_FILE);
+        setContentView(R.layout.activity_loadfile);
+        listView = (ListView) findViewById(R.id.list);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, list);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id) {
+                chosenFile = (String) listView.getItemAtPosition(position);
+                FileLoggerFactory.loadGpxFile(chosenFile);
+                ViewPropertyAnimator viewPropertyAnimator = view.animate().setDuration(500).alpha(0);
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                    viewPropertyAnimator.setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            list.remove(chosenFile);
+                            adapter.notifyDataSetChanged();
+                            view.setAlpha(1);
+                        }
+                    });
+                } else {
+                    viewPropertyAnimator.withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            list.remove(chosenFile);
+                            adapter.notifyDataSetChanged();
+                            view.setAlpha(1);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void loadFileList() {
@@ -35,6 +74,7 @@ public class LoadFileActivity extends Activity {
         catch(SecurityException e) {
             e.printStackTrace();
         }
+        list = new ArrayList<>();
         if(mPath.exists()) {
             FilenameFilter filter = new FilenameFilter() {
 
@@ -45,34 +85,14 @@ public class LoadFileActivity extends Activity {
                 }
 
             };
-            mFileList = mPath.list(filter);
-        }
-        else {
-            mFileList= new String[0];
-        }
-    }
-
-    protected Dialog onCreateDialog(int id) {
-        Dialog dialog = null;
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        switch(id) {
-            case DIALOG_LOAD_FILE:
-                builder.setTitle("Choose your file");
-                if(mFileList == null) {
-                    dialog = builder.create();
-                    return dialog;
+            String[] mFileList = mPath.list(filter);
+            for (String file : mFileList) {
+                if (Session.getController().getImportedTrack(file) == null) {
+                    list.add(file);
                 }
-                builder.setItems(mFileList, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        mChosenFile = mFileList[which];
-                        FileLoggerFactory.loadGpxFile(mChosenFile);
-                    }
-                });
-                break;
+            }
         }
-        dialog = builder.show();
-        return dialog;
     }
+
 
 }

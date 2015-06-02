@@ -10,7 +10,7 @@ import android.preference.PreferenceManager;
  * Created by Fabio on 26/05/2015.
  */
 public class AppSettings extends Application {
-    private static int minTime, minDistance, initialDelay, period;
+    private static int minTime, minDistance, initialDelay, period, fixedDistance, fixedTime;
     private static SharedPreferences preferences;
     private static boolean latitudeBar, longitudeBar;
     private static String directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString();
@@ -63,6 +63,22 @@ public class AppSettings extends Application {
         AppSettings.longitudeBar = longitudeBar;
     }
 
+    public static int getFixedDistance() {
+        return fixedDistance;
+    }
+
+    public static void setFixedDistance(int fixedDistance) {
+        AppSettings.fixedDistance = fixedDistance;
+    }
+
+    public static int getFixedTime() {
+        return fixedTime;
+    }
+
+    public static void setFixedTime(int fixedTime) {
+        AppSettings.fixedTime = fixedTime;
+    }
+
     public static String getDirectory() {
         return directory;
     }
@@ -75,12 +91,14 @@ public class AppSettings extends Application {
         if (preferences == null) {
             preferences = PreferenceManager.getDefaultSharedPreferences(context);
         }
-        setMinTime(Integer.valueOf(preferences.getString("minTime", "60")));
-        setMinDistance(Integer.valueOf(preferences.getString("minDistance", "10")));
+        setMinTime(Integer.valueOf(preferences.getString("minTime", "0")));
+        setMinDistance(Integer.valueOf(preferences.getString("minDistance", "15")));
         setInitialDelay(Integer.valueOf(preferences.getString("initialDelay", "10")));
         setPeriod(Integer.valueOf(preferences.getString("period", "10")));
         setLatitudeBar(preferences.getBoolean("latitudeBar", true));
         setLongitudeBar(preferences.getBoolean("longitudeBar", true));
+        setFixedDistance(Integer.valueOf(preferences.getString("elapsedDist", "0")));
+        setFixedTime(Integer.valueOf(preferences.getString("elapsedTime", "0")));
     }
 
 }

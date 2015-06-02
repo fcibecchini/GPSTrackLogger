@@ -59,6 +59,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="it.uniroma3.android.gpstracklogger.GPSMainActivity" />
         </activity>
+        <activity
+            android:name=".ImportedFileActivity"
+            android:label="@string/title_activity_imported_file"
+            android:parentActivityName=".GPSMainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="it.uniroma3.android.gpstracklogger.GPSMainActivity" />
+        </activity>
+        <activity
+            android:name=".GraphActivity"
+            android:label="@string/title_activity_graph"
+            android:parentActivityName=".ImportedFileActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="it.uniroma3.android.gpstracklogger.ImportedFileActivity" />
+        </activity>
     </application>
 
 </manifest>

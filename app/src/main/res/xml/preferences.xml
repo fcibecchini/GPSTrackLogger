@@ -10,7 +10,7 @@
             android:key="minTime"
             android:entries="@array/minTimes"
             android:entryValues="@array/minTimesValues"
-            android:defaultValue="60" />
+            android:defaultValue="0" />
 
         <ListPreference
             android:title="Minimun distance"
@@ -53,6 +53,22 @@
             android:summary="show the longitude bar"
             android:key="longitudeBar"
             android:defaultValue="true" />
+
+        <ListPreference
+            android:title="Show distance"
+            android:summary="show distance every selected kms"
+            android:key="elapsedDist"
+            android:entries="@array/elapsedDistances"
+            android:entryValues="@array/elapsedDistancesValues"
+            android:defaultValue="0" />
+
+        <ListPreference
+            android:title="Show time"
+            android:summary="show time every selected time"
+            android:key="elapsedTime"
+            android:entries="@array/elapsedTime"
+            android:entryValues="@array/elapsedTimeValues"
+            android:defaultValue="0" />
 
     </PreferenceCategory>
 

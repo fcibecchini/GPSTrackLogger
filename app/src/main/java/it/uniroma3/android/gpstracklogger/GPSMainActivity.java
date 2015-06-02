@@ -1,9 +1,9 @@
 package it.uniroma3.android.gpstracklogger;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -16,12 +16,12 @@ import de.greenrobot.event.EventBus;
 import it.uniroma3.android.gpstracklogger.application.AppSettings;
 import it.uniroma3.android.gpstracklogger.events.Events;
 import it.uniroma3.android.gpstracklogger.application.Session;
+import it.uniroma3.android.gpstracklogger.model.Track;
 import it.uniroma3.android.gpstracklogger.service.GPSLoggingService;
-import java.util.Date;
 
 public class GPSMainActivity extends Activity {
     private Intent serviceIntent;
-    private Button start,stop,locDetails;
+    private Button start,stop,locDetails,ret;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +58,7 @@ public class GPSMainActivity extends Activity {
         if (!Session.isStarted()) {
             stop.setEnabled(true);
             locDetails.setEnabled(true);
+            ret.setEnabled(true);
             start.setEnabled(false);
             setTextViewValue(R.id.notice, "Tracking...");
             startLogging();
@@ -67,8 +68,11 @@ public class GPSMainActivity extends Activity {
 
     public void stopClick() {
         if (Session.isStarted()) {
+            if (!Session.getController().getCurrentTrack().isEmpty())
+                showTripInfo();
             stop.setEnabled(false);
             locDetails.setEnabled(false);
+            ret.setEnabled(false);
             start.setEnabled(true);
             Session.getController().stopWriting();
             stopLogging();
@@ -85,6 +89,11 @@ public class GPSMainActivity extends Activity {
         startActivity(load);
     }
 
+    public void unloadClick() {
+        Intent unload = new Intent(this, ImportedFileActivity.class);
+        startActivity(unload);
+    }
+
     public void prefClick() {
         Intent set = new Intent(this, SettingsActivity.class);
         startActivity(set);
@@ -93,6 +102,36 @@ public class GPSMainActivity extends Activity {
     public void detailsClick() {
         Intent det = new Intent(this, LocDetailsActivity.class);
         startActivity(det);
+    }
+
+    public void returnClick() {
+        if (Session.getController().setReturn()) {
+            ret.setEnabled(false);
+            showTripInfo();
+        }
+    }
+
+    public void compassClick() {
+        if (!Session.isCompass())
+            Session.setCompass(true);
+        else
+            Session.setCompass(false);
+    }
+
+    private void showTripInfo() {
+        Track current = Session.getController().getCurrentTrack();
+        new AlertDialog.Builder(this)
+                .setTitle("Trip Info")
+                .setMessage("Distanza percorsa: "+current.getStringTotalDistance()+"\n"+
+                        "Tempo trascorso: "+current.getStringTime())
+                .setCancelable(true)
+                .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .show();
     }
 
     private void startLogging() {
@@ -130,11 +169,15 @@ public class GPSMainActivity extends Activity {
         stop = (Button) findViewById(R.id.stopButton);
         Button draw = (Button) findViewById(R.id.draw);
         Button load = (Button) findViewById(R.id.loadtrack);
+        Button unload = (Button) findViewById(R.id.unloadtrack);
         Button prefs = (Button) findViewById(R.id.prefs);
         locDetails = (Button) findViewById(R.id.locdetails);
+        ret = (Button) findViewById(R.id.return1);
+        Button compass = (Button) findViewById(R.id.compass);
         if (!Session.isStarted()) {
             stop.setEnabled(false);
             locDetails.setEnabled(false);
+            ret.setEnabled(false);
         }
         start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,6 +197,12 @@ public class GPSMainActivity extends Activity {
                 detailsClick();
             }
         });
+        ret.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnClick();
+            }
+        });
         draw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,6 +213,18 @@ public class GPSMainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 loadClick();
+            }
+        });
+        unload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unloadClick();
+            }
+        });
+        compass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compassClick();
             }
         });
         prefs.setOnClickListener(new View.OnClickListener() {

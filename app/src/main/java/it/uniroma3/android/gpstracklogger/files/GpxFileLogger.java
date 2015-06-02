@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import it.uniroma3.android.gpstracklogger.application.Utilities;
 import it.uniroma3.android.gpstracklogger.model.Track;
 import it.uniroma3.android.gpstracklogger.model.TrackPoint;
 
@@ -60,17 +61,13 @@ public class GpxFileLogger {
                     .append("\">");
             if (point.hasAltitude())
                 trackSegment.append("<ele>").append(String.valueOf(point.getAltitude())).append("</ele>");
-            trackSegment.append("<time>").append(getISODateTime(point.getTime())).append("</time>");
+            trackSegment.append("<time>").append(Utilities.getISODateTime(point.getTime())).append("</time>");
+            if (point.hasDesc())
+                trackSegment.append("<desc>").append(point.getDesc()).append("</desc>");
             trackSegment.append("</trkpt>");
         }
 
         return trackSegment.toString();
     }
 
-    private String getISODateTime(Date dateToFormat) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'KK:mm:ss'Z'",
-                Locale.ITALIAN);
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return sdf.format(dateToFormat);
-    }
 }

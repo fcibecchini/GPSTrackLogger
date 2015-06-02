@@ -181,6 +181,7 @@ public class GPXFileLoader {
         double longitude;
         double altitude;
         float speed;
+        String desc;
         Date time;
 
         String tag = parser.getName();
@@ -208,6 +209,9 @@ public class GPXFileLoader {
             } else if (name.equals("time")) {
                 time = readTime(parser);
                 tp.setTime(time);
+            } else if (name.equals("desc")) {
+                desc = readDesc(parser);
+                tp.setDesc(desc);
             } else {
                 skip(parser);
             }
@@ -242,6 +246,13 @@ public class GPXFileLoader {
         String name = readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "name");
         return name;
+    }
+
+    private String readDesc(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "desc");
+        String desc = readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "desc");
+        return desc;
     }
 
     private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {

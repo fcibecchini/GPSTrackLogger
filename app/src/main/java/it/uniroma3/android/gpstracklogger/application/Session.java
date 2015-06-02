@@ -1,9 +1,8 @@
 package it.uniroma3.android.gpstracklogger.application;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+
+import java.util.List;
 
 import it.uniroma3.android.gpstracklogger.model.GPSController;
 
@@ -13,19 +12,23 @@ import it.uniroma3.android.gpstracklogger.model.GPSController;
 public class Session extends Application {
     private static GPSController controller;
     private static Converter converter;
-    private static boolean isStarted, isConverterSet;
+    private static boolean started, converterSet, compass;
     private static boolean providerEnabled, providerAvailable, locationChanged;
 
     public static boolean isStarted() {
-        return isStarted;
+        return started;
     }
 
     public static void setStarted(boolean started) {
-        Session.isStarted = started;
+        Session.started = started;
     }
 
     public static boolean isConverterSet() {
-        return isConverterSet;
+        return converterSet;
+    }
+
+    public static void setConverterSet(boolean converterSet) {
+        Session.converterSet = converterSet;
     }
 
     public static GPSController getController() {
@@ -43,7 +46,6 @@ public class Session extends Application {
     public static void setConverter(double lon, double lat) {
         converter.setLongitude(lon);
         converter.setLatitude(lat);
-        isConverterSet = true;
     }
 
     public static boolean isProviderEnabled() {
@@ -69,4 +71,13 @@ public class Session extends Application {
     public static void setLocationChanged(boolean locationChanged) {
         Session.locationChanged = locationChanged;
     }
+
+    public static boolean isCompass() {
+        return compass;
+    }
+
+    public static void setCompass(boolean compass) {
+        Session.compass = compass;
+    }
+
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/trackname"
+        android:layout_margin="@dimen/abc_dialog_list_padding_vertical_material"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/trackdistance"
+        android:layout_below="@+id/trackname"
+        android:layout_marginLeft="@dimen/abc_dialog_list_padding_vertical_material"
+        android:layout_marginBottom="@dimen/abc_dialog_list_padding_vertical_material" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/tracktime"
+        android:layout_alignTop="@+id/trackdistance"
+        android:layout_toRightOf="@+id/trackdistance"
+        android:layout_toEndOf="@+id/trackdistance"
+        android:layout_marginLeft="@dimen/abc_dialog_list_padding_vertical_material" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/trackelevationchange"
+        android:layout_alignTop="@+id/tracktime"
+        android:layout_toRightOf="@+id/tracktime"
+        android:layout_toEndOf="@+id/tracktime"
+        android:layout_marginLeft="@dimen/abc_dialog_list_padding_vertical_material" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Chart"
+        android:id="@+id/showchart"
+        android:layout_below="@+id/trackdistance" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unload"
+        android:id="@+id/unloadtrack"
+        android:layout_alignTop="@+id/showchart"
+        android:layout_toRightOf="@+id/showchart"
+        android:layout_toEndOf="@+id/showchart" />
+
+</RelativeLayout>

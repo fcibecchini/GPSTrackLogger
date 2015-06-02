@@ -12,6 +12,7 @@ import android.graphics.Point;
 import it.uniroma3.android.gpstracklogger.application.AppSettings;
 import it.uniroma3.android.gpstracklogger.application.Converter;
 import it.uniroma3.android.gpstracklogger.application.Session;
+import it.uniroma3.android.gpstracklogger.application.Utilities;
 import it.uniroma3.android.gpstracklogger.model.TrackPoint;
 
 /**
@@ -31,13 +32,10 @@ public class ScaleView extends View {
     private float yMetersPerInch;
     private float xMetersPerInch;
 
-
-
     public ScaleView(Context context) {
         super(context);
         mXdpi = context.getResources().getDisplayMetrics().xdpi;
         mYdpi = context.getResources().getDisplayMetrics().ydpi;
-
     }
 
     public float getYMetersPerInch() {
@@ -80,15 +78,7 @@ public class ScaleView extends View {
             TrackPoint p1 = converter.getTrackPoint(new Point((int) ((getWidth() / 2) - (mXdpi / 2)), getHeight() / 2));
             TrackPoint p2 = converter.getTrackPoint(new Point((int) ((getWidth() / 2) + (mXdpi / 2)), getHeight() / 2));
 
-            Location locationP1 = new Location("ScaleBar location p1");
-            Location locationP2 = new Location("ScaleBar location p2");
-
-            locationP1.setLatitude(p1.getLatitude());
-            locationP2.setLatitude(p2.getLatitude());
-            locationP1.setLongitude(p1.getLongitude());
-            locationP2.setLongitude(p2.getLongitude());
-
-            xMetersPerInch = locationP1.distanceTo(locationP2);
+            xMetersPerInch = p1.distanceTo(p2);
 
             if (mIsLongitudeBar) {
                 String xMsg = scaleBarLengthText(xMetersPerInch);
@@ -115,20 +105,13 @@ public class ScaleView extends View {
         Converter converter = Session.getConverter();
 
         if (converter != null) {
-            Location locationP1 = new Location("ScaleBar location p1");
-            Location locationP2 = new Location("ScaleBar location p2");
 
             TrackPoint p1 = converter.getTrackPoint(new Point(getWidth() / 2,
                     (int) ((getHeight() / 2) - (mYdpi / 2))));
             TrackPoint p2 = converter.getTrackPoint(new Point(getWidth() / 2,
                     (int) ((getHeight() / 2) + (mYdpi / 2))));
 
-            locationP1.setLatitude(p1.getLatitude());
-            locationP2.setLatitude(p2.getLatitude());
-            locationP1.setLongitude(p1.getLongitude());
-            locationP2.setLongitude(p2.getLongitude());
-
-            yMetersPerInch = locationP1.distanceTo(locationP2);
+            yMetersPerInch = p1.distanceTo(p2);
 
             if (mIsLatitudeBar) {
                 String yMsg = scaleBarLengthText(yMetersPerInch);
@@ -158,13 +141,7 @@ public class ScaleView extends View {
     private String scaleBarLengthText(float meters) {
         if ((meters - (int) meters) > 0.5)
             meters++;
-        int mt = (int) meters;
-        if (meters >= 1000) {
-            double mt1 = mt;
-            return ((mt1 / 1000)) + "km";
-        }else {
-            return mt + "m";
-        }
+        return Utilities.getFormattedDistance((int)meters, true);
     }
 
 }

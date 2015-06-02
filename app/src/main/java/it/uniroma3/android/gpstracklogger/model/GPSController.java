@@ -53,12 +53,34 @@ public class GPSController {
         return this.importedTracks;
     }
 
+    public boolean removeImportedTrack(String name) {
+        for (Track t : this.importedTracks) {
+            if (t.getName().equals(name)) {
+                return this.importedTracks.remove(t);
+            }
+        }
+        return false;
+    }
+
+    public Track getImportedTrack(String name) {
+        for (Track t : this.importedTracks) {
+            if (t.getName().equals(name)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
     public List<TrackPoint> getWaypoints() {
         return this.waypoints;
     }
 
     public boolean addWayPoint(TrackPoint point) {
         return this.waypoints.add(point);
+    }
+
+    public void removeWayPoints() {
+        this.waypoints.clear();
     }
 
     public void scheduleWriting() {
@@ -73,6 +95,14 @@ public class GPSController {
         FileLoggerFactory.write(this.currentTrack);
         if (stop)
             this.currentTrack = null;
+    }
+
+    public boolean setReturn() {
+        if (!this.currentTrack.isEmpty()) {
+            this.currentTrack.setReturn();
+            return true;
+        }
+        return false;
     }
 
 }
