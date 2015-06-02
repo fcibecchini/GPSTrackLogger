@@ -26,18 +26,12 @@
         android:title="Auto Save">
 
         <EditTextPreference
-            android:title="First Save in minutes"
-            android:summary="first time to save track"
-            android:key="initialDelay"
-            android:inputType="number"
-            android:defaultValue="10" />
-
-        <EditTextPreference
             android:title="Save Period in minutes"
             android:summary="period save track"
             android:key="period"
             android:inputType="number"
             android:defaultValue="10" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

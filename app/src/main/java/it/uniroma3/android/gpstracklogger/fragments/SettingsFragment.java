@@ -1,4 +1,4 @@
-package it.uniroma3.android.gpstracklogger.prefs;
+package it.uniroma3.android.gpstracklogger.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;

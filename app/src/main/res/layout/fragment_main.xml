@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/start"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/startButton"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/startdesc"
+        android:id="@+id/startdesc"
+        android:layout_below="@+id/startButton"
+        android:layout_margin="@dimen/abc_dialog_list_padding_vertical_material" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/stop"
+        android:id="@+id/stopButton"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/startdesc"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/unloadtrackdesc"
+        android:id="@+id/unloadtrackdesc"
+        android:layout_below="@+id/stopButton"
+        android:layout_margin="@dimen/abc_dialog_list_padding_vertical_material" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/unloadtrack"
+        android:id="@+id/unloadtrack"
+        android:layout_below="@+id/unloadtrackdesc"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/notice"
+        android:enabled="false"
+        android:layout_below="@+id/unloadtrack"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>

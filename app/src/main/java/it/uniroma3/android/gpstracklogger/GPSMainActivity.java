@@ -1,27 +1,32 @@
 package it.uniroma3.android.gpstracklogger;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import de.greenrobot.event.EventBus;
 import it.uniroma3.android.gpstracklogger.application.AppSettings;
 import it.uniroma3.android.gpstracklogger.events.Events;
 import it.uniroma3.android.gpstracklogger.application.Session;
+import it.uniroma3.android.gpstracklogger.fragments.LoadFileFragment;
+import it.uniroma3.android.gpstracklogger.fragments.LocDetailsFragment;
+import it.uniroma3.android.gpstracklogger.fragments.MainFragment;
 import it.uniroma3.android.gpstracklogger.model.Track;
 import it.uniroma3.android.gpstracklogger.service.GPSLoggingService;
 
-public class GPSMainActivity extends Activity {
+public class GPSMainActivity extends AppCompatActivity {
     private Intent serviceIntent;
-    private Button start,stop,locDetails,ret;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +36,15 @@ public class GPSMainActivity extends Activity {
         loadSettings();
         RegisterEventBus();
         startService();
-        loadButtons();
+        loadFragment();
+    }
+
+    private void loadFragment() {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        MainFragment fragment = new MainFragment();
+        fragmentTransaction.add(R.id.container, fragment);
+        fragmentTransaction.commit();
     }
 
     private void RegisterEventBus() {
@@ -54,44 +67,15 @@ public class GPSMainActivity extends Activity {
         AppSettings.loadSettings(this);
     }
 
-    public void startClick() {
-        if (!Session.isStarted()) {
-            stop.setEnabled(true);
-            locDetails.setEnabled(true);
-            ret.setEnabled(true);
-            start.setEnabled(false);
-            setTextViewValue(R.id.notice, "Tracking...");
-            startLogging();
-            Session.getController().scheduleWriting();
-        }
-    }
-
-    public void stopClick() {
-        if (Session.isStarted()) {
-            if (!Session.getController().getCurrentTrack().isEmpty())
-                showTripInfo();
-            stop.setEnabled(false);
-            locDetails.setEnabled(false);
-            ret.setEnabled(false);
-            start.setEnabled(true);
-            Session.getController().stopWriting();
-            stopLogging();
-        }
-    }
-
     public void drawClick() {
         Intent draw = new Intent(this, StartDrawActivity.class);
         startActivity(draw);
     }
 
     public void loadClick() {
-        Intent load = new Intent(this, LoadFileActivity.class);
-        startActivity(load);
-    }
-
-    public void unloadClick() {
-        Intent unload = new Intent(this, ImportedFileActivity.class);
-        startActivity(unload);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new LoadFileFragment())
+                .commit();
     }
 
     public void prefClick() {
@@ -100,22 +84,74 @@ public class GPSMainActivity extends Activity {
     }
 
     public void detailsClick() {
-        Intent det = new Intent(this, LocDetailsActivity.class);
-        startActivity(det);
+        if (Session.isStarted()) {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.container, new LocDetailsFragment())
+                    .commit();
+        }
+        else
+            alertSessionState("Not tracking...");
+    }
+
+    public void mainClick() {
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new MainFragment())
+                .commit();
     }
 
     public void returnClick() {
-        if (Session.getController().setReturn()) {
-            ret.setEnabled(false);
-            showTripInfo();
+        if (Session.isStarted() && !Session.isReturning()) {
+            if (Session.getController().setReturn()) {
+                showTripInfo();
+                Session.setReturning(true);
+            }
+            else
+                alertSessionState("No trackpoints...");
         }
+        else
+            alertSessionState("Not tracking...");
+    }
+
+    private void alertSessionState(String message) {
+        new AlertDialog.Builder(this)
+                .setTitle("Stato sessione")
+                .setMessage(message)
+                .setCancelable(true)
+                .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     public void compassClick() {
-        if (!Session.isCompass())
-            Session.setCompass(true);
-        else
-            Session.setCompass(false);
+        View checkBoxView = View.inflate(this, R.layout.checkbok, null);
+        CheckBox checkBox = (CheckBox) checkBoxView.findViewById(R.id.checkbox);
+        checkBox.setChecked(Session.isCompass());
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (Session.isCompass())
+                    Session.setCompass(false);
+                else
+                    Session.setCompass(true);
+            }
+        });
+        checkBox.setText("Abilita bussola");
+
+        new AlertDialog.Builder(this)
+                .setTitle("Modalità Bussola")
+                .setView(checkBoxView)
+                .setCancelable(false)
+                .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 
     private void showTripInfo() {
@@ -132,14 +168,6 @@ public class GPSMainActivity extends Activity {
                 })
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .show();
-    }
-
-    private void startLogging() {
-        EventBus.getDefault().post(new Events.Start());
-    }
-
-    private void stopLogging() {
-        EventBus.getDefault().post(new Events.Stop());
     }
 
     public void onEventMainThread(Events.Directory dir) {
@@ -164,97 +192,46 @@ public class GPSMainActivity extends Activity {
         }
     }
 
-    private void loadButtons() {
-        start = (Button) findViewById(R.id.startButton);
-        stop = (Button) findViewById(R.id.stopButton);
-        Button draw = (Button) findViewById(R.id.draw);
-        Button load = (Button) findViewById(R.id.loadtrack);
-        Button unload = (Button) findViewById(R.id.unloadtrack);
-        Button prefs = (Button) findViewById(R.id.prefs);
-        locDetails = (Button) findViewById(R.id.locdetails);
-        ret = (Button) findViewById(R.id.return1);
-        Button compass = (Button) findViewById(R.id.compass);
-        if (!Session.isStarted()) {
-            stop.setEnabled(false);
-            locDetails.setEnabled(false);
-            ret.setEnabled(false);
-        }
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startClick();
-            }
-        });
-        stop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopClick();
-            }
-        });
-        locDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                detailsClick();
-            }
-        });
-        ret.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                returnClick();
-            }
-        });
-        draw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawClick();
-            }
-        });
-        load.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadClick();
-            }
-        });
-        unload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                unloadClick();
-            }
-        });
-        compass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                compassClick();
-            }
-        });
-        prefs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                prefClick();
-            }
-        });
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_gpsmain, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_map: {
+                drawClick();
+                return true;
+            }
+            case R.id.action_settings: {
+                prefClick();
+                return true;
+            }
+            case R.id.action_main: {
+                mainClick();
+                return true;
+            }
+            case R.id.action_compass: {
+                compassClick();
+                return true;
+            }
+            case R.id.action_return: {
+                returnClick();
+                return true;
+            }
+            case R.id.action_details: {
+                detailsClick();
+                return true;
+            }
+            case R.id.action_load: {
+                loadClick();
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

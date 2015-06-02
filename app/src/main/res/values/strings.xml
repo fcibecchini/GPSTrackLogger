@@ -20,6 +20,32 @@
     <string name="prefs_location">Salve Location</string>
     <string name="prefs_mapsettings">Map Settings</string>
 
+    <string name="set_compass">Modalità bussola</string>
+
+    <string name="set_return">Inizio ritorno</string>
+
+    <string name="load">Carica tracce</string>
+
+    <string name="map">Mappa</string>
+
+    <string name="loc_details">Dettagli punto</string>
+
+    <string name="main">Start/Stop</string>
+
+    <string name="unloadtrack">Show Track List</string>
+
+    <string name="startdesc">Press start button, start GPS tracking</string>
+
+    <string name="unloadtrackdesc">Show track result</string>
+
+
+
+    <string-array name="action_list">
+        <item>View Map</item>
+        <item>Location Details</item>
+        <item>Set Return</item>
+    </string-array>
+
     <string-array name="minTimes">
         <item>None</item>
         <item>1 min</item>
@@ -82,7 +108,5 @@
         <item>10000</item>
     </string-array>
     <string name="title_activity_graph">GraphActivity</string>
-
-    <string name="hello_world">Hello world!</string>
 
 </resources>

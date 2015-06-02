@@ -192,7 +192,7 @@ public class DrawView extends View {
 
     public void fit() {
         Track track;
-        if (current != null)
+        if (current != null  && !current.isEmpty())
             track = current;
         else if (!imported.isEmpty())
             track = imported.get(0);

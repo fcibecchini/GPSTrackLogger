@@ -47,6 +47,10 @@ public class Track {
         this.trackPoints = tp;
     }
 
+    public int size() {
+        return this.trackPoints.size();
+    }
+
     public boolean addTrackPoint(Location loc) {
         TrackPoint trackPoint = new TrackPoint();
         Date timestamp = new Date(loc.getTime());

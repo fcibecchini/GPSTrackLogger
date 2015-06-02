@@ -84,7 +84,7 @@ public class GPSController {
     }
 
     public void scheduleWriting() {
-        writerHandle = scheduler.scheduleAtFixedRate(writer, AppSettings.getInitialDelay(), AppSettings.getPeriod(), TimeUnit.MINUTES);
+        writerHandle = scheduler.scheduleAtFixedRate(writer, AppSettings.getPeriod(), AppSettings.getPeriod(), TimeUnit.MINUTES);
     }
 
     public void stopWriting() {
@@ -98,7 +98,7 @@ public class GPSController {
     }
 
     public boolean setReturn() {
-        if (!this.currentTrack.isEmpty()) {
+        if (!this.currentTrack.isEmpty() && this.currentTrack.size()>1) {
             this.currentTrack.setReturn();
             return true;
         }

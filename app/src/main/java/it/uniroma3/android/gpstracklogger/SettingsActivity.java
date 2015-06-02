@@ -3,7 +3,7 @@ package it.uniroma3.android.gpstracklogger;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-import it.uniroma3.android.gpstracklogger.prefs.SettingsFragment;
+import it.uniroma3.android.gpstracklogger.fragments.SettingsFragment;
 
 
 public class SettingsActivity extends PreferenceActivity {

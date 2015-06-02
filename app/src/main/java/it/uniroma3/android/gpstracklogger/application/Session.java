@@ -12,7 +12,7 @@ import it.uniroma3.android.gpstracklogger.model.GPSController;
 public class Session extends Application {
     private static GPSController controller;
     private static Converter converter;
-    private static boolean started, converterSet, compass;
+    private static boolean started, converterSet, compass, returning;
     private static boolean providerEnabled, providerAvailable, locationChanged;
 
     public static boolean isStarted() {
@@ -80,4 +80,11 @@ public class Session extends Application {
         Session.compass = compass;
     }
 
+    public static boolean isReturning() {
+        return returning;
+    }
+
+    public static void setReturning(boolean returning) {
+        Session.returning = returning;
+    }
 }
