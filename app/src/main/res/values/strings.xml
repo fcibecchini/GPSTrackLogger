@@ -4,47 +4,35 @@
     <string name="start">Start search</string>
     <string name="stop">Stop search</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_start_draw">StartDraw</string>
-    <string name="draw">View Track</string>
-
-    <string name="title_activity_load_file">LoadFileActivity</string>
-
+    <string name="title_activity_start_draw">Map</string>
     <string name="title_activity_settings">SettingsActivity</string>
-
-    <string name="title_activity_imported_file">ImportedFileActivity</string>
-
-    <string name="title_activity_loc_details">LocDetailsActivity</string>
-
+    <string name="title_activity_graph">Graph</string>
+    <string name="draw">Map</string>
     <string name="prefs_measure">Measure Mode</string>
     <string name="prefs_autosave">Auto Save</string>
     <string name="prefs_location">Salve Location</string>
     <string name="prefs_mapsettings">Map Settings</string>
-
     <string name="set_compass">Modalità bussola</string>
-
     <string name="set_return">Inizio ritorno</string>
-
     <string name="load">Carica tracce</string>
-
     <string name="map">Mappa</string>
-
-    <string name="loc_details">Dettagli punto</string>
-
+    <string name="loc_details">Dettagli traccia</string>
     <string name="main">Start/Stop</string>
-
     <string name="unloadtrack">Show Track List</string>
-
     <string name="startdesc">Press start button, start GPS tracking</string>
-
     <string name="unloadtrackdesc">Show track result</string>
-
     <string name="close">Chiudi</string>
-
     <string name="alttime">X: Tempo</string>
-
     <string name="altdistance">X: Distanza</string>
-
-
+    <string name="available">Disponibile</string>
+    <string name="enabled">Abilitato</string>
+    <string name="timestamp">Data</string>
+    <string name="latitude">Latitudine</string>
+    <string name="longitude">Longitudine</string>
+    <string name="altitude">Altitudine</string>
+    <string name="speed">Velocità</string>
+    <string name="currentdist">Distanza percorsa</string>
+    <string name="currenttime">Tempo trascorso</string>
 
     <string-array name="action_list">
         <item>View Map</item>
@@ -113,6 +101,5 @@
         <item>5000</item>
         <item>10000</item>
     </string-array>
-    <string name="title_activity_graph">Graph</string>
 
 </resources>

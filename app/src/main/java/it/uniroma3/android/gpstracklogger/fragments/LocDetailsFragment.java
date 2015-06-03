@@ -21,16 +21,20 @@ import java.util.TreeSet;
 import de.greenrobot.event.EventBus;
 import it.uniroma3.android.gpstracklogger.R;
 import it.uniroma3.android.gpstracklogger.application.Session;
+import it.uniroma3.android.gpstracklogger.application.Utilities;
 import it.uniroma3.android.gpstracklogger.events.Events;
+import it.uniroma3.android.gpstracklogger.model.Track;
 import it.uniroma3.android.gpstracklogger.model.TrackPoint;
 
 
 public class LocDetailsFragment extends Fragment {
     RelativeLayout rlayout;
+    private Track current;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rlayout = (RelativeLayout) inflater.inflate(R.layout.fragment_loc_details, container, false);
+        current = Session.getController().getCurrentTrack();
         setDisplay();
         return rlayout;
     }
@@ -39,10 +43,13 @@ public class LocDetailsFragment extends Fragment {
         if (Session.isLocationChanged())
             displayProviderInfo();
         TreeSet<TrackPoint> trackPoints = null;
-        if (Session.getController().getCurrentTrack() != null)
-            trackPoints = (TreeSet) Session.getController().getCurrentTrack().getTrackPoints();
-        if (!trackPoints.isEmpty())
+        if (current != null)
+            trackPoints = (TreeSet) current.getTrackPoints();
+        if (!trackPoints.isEmpty()) {
+            setTextViewValue(R.id.currentdist, current.getStringTotalDistance());
+            setTextViewValue(R.id.currenttime, current.getStringTime());
             displayLocationInfo(trackPoints.last());
+        }
     }
 
     private void displayProviderInfo() {
@@ -51,12 +58,10 @@ public class LocDetailsFragment extends Fragment {
     }
 
     private void displayLocationInfo(TrackPoint location) {
-        Date timestamp = location.getTime();
-        setTextViewValue(R.id.timestamp, timestamp.toString());
         double latitude = location.getLatitude();
-        setTextViewValue(R.id.latitude, String.valueOf(latitude));
+        setTextViewValue(R.id.latitude, Utilities.formatValue(latitude));
         double longitude = location.getLongitude();
-        setTextViewValue(R.id.longitude, String.valueOf(longitude));
+        setTextViewValue(R.id.longitude, Utilities.formatValue(longitude));
         if (location.hasAltitude()) {
             double altitude = location.getAltitude();
             setTextViewValue(R.id.altitude, String.valueOf(altitude));

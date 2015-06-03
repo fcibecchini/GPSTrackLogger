@@ -83,7 +83,7 @@ public class AdapterTrack extends ArrayAdapter<Track> {
             holder.trackname.setText(lTrack.get(position).getName().replace(".gpx", ""));
             holder.trackdistance.setText(lTrack.get(position).getStringTotalDistance());
             String time = lTrack.get(position).getStringTime();
-            String formatted = "("+time.substring(0,2)+"h "+time.substring(3, 5)+"m)";
+            String formatted = "("+time.substring(0,2)+"h "+time.substring(3, 5)+"m "+time.substring(6)+"s)";
             holder.tracktime.setText(formatted);
             holder.trackelevationchange.setText("Total Climb: "+lTrack.get(position).stringTotalClimb());
 

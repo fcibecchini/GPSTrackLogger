@@ -9,7 +9,6 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/scrollView2"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -21,127 +20,146 @@
             android:layout_height="wrap_content" >
 
             <TableRow
-                android:padding="5px"
+                android:padding="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
 
                 <TextView
-                    android:text="Disponibile"
-                    android:padding="5px"
+                    android:text="@string/available"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/available"
-                    android:padding="5px"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </TableRow>
 
             <TableRow
-                android:padding="5px"
+                android:padding="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
 
                 <TextView
-                    android:text="Abilitato"
-                    android:padding="5px"
+                    android:text="@string/enabled"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/enabled"
-                    android:padding="5px"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </TableRow>
 
             <TableRow
-                android:padding="5px"
+                android:padding="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
 
                 <TextView
-                    android:text="Timestamp"
-                    android:padding="5px"
+                    android:text="@string/currentdist"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <TextView
-                    android:id="@+id/timestamp"
-                    android:padding="5px"
+                    android:id="@+id/currentdist"
+                    android:padding="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+
+            <TableRow
+                android:padding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:text="@string/currenttime"
+                    android:padding="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/currenttime"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </TableRow>
 
             <TableRow
-                android:padding="5px"
+                android:padding="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
 
                 <TextView
-                    android:text="Latitudine"
-                    android:padding="5px"
+                    android:text="@string/latitude"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/latitude"
-                    android:padding="5px"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </TableRow>
 
             <TableRow
-                android:padding="5px"
+                android:padding="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
 
                 <TextView
-                    android:text="Longitudine"
-                    android:padding="5px"
+                    android:text="@string/longitude"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/longitude"
-                    android:padding="5px"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </TableRow>
 
             <TableRow
-                android:padding="5px"
+                android:padding="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
 
                 <TextView
-                    android:text="Altitudine"
-                    android:padding="5px"
+                    android:text="@string/altitude"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/altitude"
-                    android:padding="5px"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </TableRow>
 
             <TableRow
-                android:padding="5px"
+                android:padding="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
 
                 <TextView
-                    android:text="Velocità"
-                    android:padding="5px"
+                    android:text="@string/speed"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/speed"
-                    android:padding="5px"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </TableRow>

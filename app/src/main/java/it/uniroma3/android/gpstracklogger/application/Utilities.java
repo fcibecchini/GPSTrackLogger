@@ -3,6 +3,7 @@ package it.uniroma3.android.gpstracklogger.application;
 import android.app.Application;
 import android.graphics.Color;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -70,5 +71,11 @@ public class Utilities extends Application {
         } else {
             return distance + "m";
         }
+    }
+
+    public static String formatValue(double value) {
+        NumberFormat nf = NumberFormat.getInstance();
+        nf.setMaximumFractionDigits(6);
+        return nf.format(value);
     }
 }
