@@ -38,6 +38,12 @@
 
     <string name="unloadtrackdesc">Show track result</string>
 
+    <string name="close">Chiudi</string>
+
+    <string name="alttime">X: Tempo</string>
+
+    <string name="altdistance">X: Distanza</string>
+
 
 
     <string-array name="action_list">
@@ -107,6 +113,6 @@
         <item>5000</item>
         <item>10000</item>
     </string-array>
-    <string name="title_activity_graph">GraphActivity</string>
+    <string name="title_activity_graph">Graph</string>
 
 </resources>

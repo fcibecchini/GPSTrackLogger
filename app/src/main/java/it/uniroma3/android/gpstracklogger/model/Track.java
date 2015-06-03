@@ -77,6 +77,21 @@ public class Track {
         return map;
     }
 
+    public Map<Double, Double> getAltitudePerDistance() {
+        Map<Double, Double> map = new TreeMap<>();
+        Iterator<TrackPoint> it = trackPoints.iterator();
+        TrackPoint t1 = it.next();
+        double distance = 0;
+        map.put(distance, t1.getAltitude());
+        while (it.hasNext()) {
+            TrackPoint t2 = it.next();
+            distance+=(t1.distanceTo(t2)/1000);
+            map.put(distance, t2.getAltitude());
+            t1 = t2;
+        }
+        return map;
+    }
+
     public int elapsedTime(TrackPoint tp, long fixedTime) {
         TreeSet<TrackPoint> list = (TreeSet) getTrackPoints();
         long first = list.first().getTime().getTime();
