@@ -2,6 +2,7 @@ package it.uniroma3.android.gpstracklogger.application;
 
 import android.app.Application;
 import android.graphics.Color;
+import android.location.Location;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -54,18 +55,26 @@ public class Utilities extends Application {
         return sdf.format(dateToFormat);
     }
 
-    public static String getFormattedTime(long millis) {
-        return String.format("%02d:%02d:%02d",
-                TimeUnit.MILLISECONDS.toHours(millis),
-                TimeUnit.MILLISECONDS.toMinutes(millis) -
-                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
-                TimeUnit.MILLISECONDS.toSeconds(millis) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+    public static String getFormattedTime(long seconds, boolean precisione) {
+        String format;
+        long hours = TimeUnit.SECONDS.toHours(seconds);
+        long minutes = TimeUnit.SECONDS.toMinutes(seconds);
+        if (precisione)
+           format = String.format("%02dh:%02dm:%02ds",
+                   hours,
+                   minutes - TimeUnit.HOURS.toMinutes(hours),
+                   seconds - TimeUnit.MINUTES.toSeconds(minutes));
+        else
+            format = String.format("%02d:%02d",
+                    hours,
+                    minutes - TimeUnit.HOURS.toMinutes(hours));
+
+        return format;
     }
 
-    public static String getFormattedDistance(int distance, boolean precisione) {
+    public static String getFormattedDistance(int distance, boolean decimal) {
         if (distance >= 1000) {
-            if (precisione)
+            if (decimal)
                 return ((double)distance / 1000) + "km";
             return (distance / 1000) + "km";
         } else {
@@ -73,9 +82,33 @@ public class Utilities extends Application {
         }
     }
 
-    public static String formatValue(double value) {
-        NumberFormat nf = NumberFormat.getInstance();
-        nf.setMaximumFractionDigits(6);
-        return nf.format(value);
+    public static String parseDecimalDegrees(double decimalDegrees) {
+        int degrees = (int) decimalDegrees;
+        double minutes = (decimalDegrees % 1) * 60;
+        double seconds = (minutes % 1) * 60;
+        String sDegrees = String.valueOf(degrees)+"° ";
+        String sMinutes = String.valueOf((int)minutes)+"' ";
+        String sSeconds = String.valueOf((int)seconds)+"'' ";
+        String formattedString = sDegrees + sMinutes + sSeconds;
+        return formattedString;
     }
+
+    public static String parseLatitude(double latitude) {
+        String lat = parseDecimalDegrees(Math.abs(latitude));
+        if (latitude>0)
+            lat+="N";
+        else
+            lat+="S";
+        return lat;
+    }
+
+    public static String parseLongitude(double longitude) {
+        String lon = parseDecimalDegrees(Math.abs(longitude));
+        if (longitude>0)
+            lon+="E";
+        else
+            lon+="W";
+        return lon;
+    }
+
 }

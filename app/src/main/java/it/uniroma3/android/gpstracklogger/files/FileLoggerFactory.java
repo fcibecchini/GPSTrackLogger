@@ -1,12 +1,8 @@
 package it.uniroma3.android.gpstracklogger.files;
 
-import android.os.Environment;
-
 import java.io.File;
 
-import de.greenrobot.event.EventBus;
 import it.uniroma3.android.gpstracklogger.application.AppSettings;
-import it.uniroma3.android.gpstracklogger.events.Events;
 import it.uniroma3.android.gpstracklogger.model.Track;
 
 /**
@@ -32,7 +28,6 @@ public class FileLoggerFactory {
             countFile = 0;
         }
         GpxFileLogger logger = new GpxFileLogger(gpxFile, track);
-        EventBus.getDefault().post(new Events.Directory(directory));
         return logger;
     }
 

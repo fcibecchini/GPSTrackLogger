@@ -14,6 +14,7 @@ import android.widget.TextView;
 import de.greenrobot.event.EventBus;
 import it.uniroma3.android.gpstracklogger.R;
 import it.uniroma3.android.gpstracklogger.application.Session;
+import it.uniroma3.android.gpstracklogger.application.Utilities;
 import it.uniroma3.android.gpstracklogger.events.Events;
 import it.uniroma3.android.gpstracklogger.model.Track;
 
@@ -35,7 +36,8 @@ public class MainFragment extends Fragment {
         if (!Session.isStarted()) {
             start.setEnabled(false);
             stop.setEnabled(true);
-            setTextViewValue(R.id.notice, "Tracking...");
+            TextView notice = (TextView) rlayout.findViewById(R.id.notice);
+            notice.setText("Tracking...");
             startLogging();
             Session.getController().scheduleWriting();
         }
@@ -57,8 +59,8 @@ public class MainFragment extends Fragment {
         Track current = Session.getController().getCurrentTrack();
         new AlertDialog.Builder(getActivity())
                 .setTitle("Trip Info")
-                .setMessage("Distanza percorsa: "+current.getStringTotalDistance()+"\n"+
-                        "Tempo trascorso: "+current.getStringTime())
+                .setMessage("Distanza percorsa: "+ Utilities.getFormattedDistance(current.getTotalDistance(), true)+"\n"+
+                        "Tempo trascorso: "+Utilities.getFormattedTime(current.getTotalTime(), true))
                 .setCancelable(true)
                 .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -77,10 +79,6 @@ public class MainFragment extends Fragment {
         EventBus.getDefault().post(new Events.Stop());
     }
 
-    private void setTextViewValue(int textViewId, String value) {
-        TextView textView = (TextView) rlayout.findViewById(textViewId);
-        textView.setText(value);
-    }
 
     private void loadButtons() {
         start = (Button) rlayout.findViewById(R.id.startButton);

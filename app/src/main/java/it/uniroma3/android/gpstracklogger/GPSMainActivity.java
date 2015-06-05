@@ -13,12 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 
-import de.greenrobot.event.EventBus;
 import it.uniroma3.android.gpstracklogger.application.AppSettings;
-import it.uniroma3.android.gpstracklogger.events.Events;
 import it.uniroma3.android.gpstracklogger.application.Session;
+import it.uniroma3.android.gpstracklogger.application.Utilities;
 import it.uniroma3.android.gpstracklogger.fragments.LoadFileFragment;
 import it.uniroma3.android.gpstracklogger.fragments.LocDetailsFragment;
 import it.uniroma3.android.gpstracklogger.fragments.MainFragment;
@@ -34,7 +32,6 @@ public class GPSMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gpsmain);
         setDefaultSettings();
         loadSettings();
-        RegisterEventBus();
         startService();
         loadFragment();
     }
@@ -45,18 +42,6 @@ public class GPSMainActivity extends AppCompatActivity {
         MainFragment fragment = new MainFragment();
         fragmentTransaction.add(R.id.container, fragment);
         fragmentTransaction.commit();
-    }
-
-    private void RegisterEventBus() {
-        EventBus.getDefault().register(this);
-    }
-
-    private void UnregisterEventBus(){
-        try {
-            EventBus.getDefault().unregister(this);
-        } catch (Throwable t){
-            //this may crash if registration did not go through. just be safe
-        }
     }
 
     private void setDefaultSettings() {
@@ -158,8 +143,8 @@ public class GPSMainActivity extends AppCompatActivity {
         Track current = Session.getController().getCurrentTrack();
         new AlertDialog.Builder(this)
                 .setTitle("Trip Info")
-                .setMessage("Distanza percorsa: "+current.getStringTotalDistance()+"\n"+
-                        "Tempo trascorso: "+current.getStringTime())
+                .setMessage("Distanza percorsa: " + Utilities.getFormattedDistance(current.getTotalDistance(), true) + "\n" +
+                        "Tempo trascorso: " + Utilities.getFormattedTime(current.getTotalTime(), true))
                 .setCancelable(true)
                 .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -168,15 +153,6 @@ public class GPSMainActivity extends AppCompatActivity {
                 })
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .show();
-    }
-
-    public void onEventMainThread(Events.Directory dir) {
-        setTextViewValue(R.id.notice, "Saved in:" + dir.directory);
-    }
-
-    private void setTextViewValue(int textViewId, String value) {
-        TextView textView = (TextView) findViewById(textViewId);
-        textView.setText(value);
     }
 
     private void startService() {
@@ -188,7 +164,7 @@ public class GPSMainActivity extends AppCompatActivity {
         try {
             stopService(serviceIntent);
         } catch (Exception e) {
-            setTextViewValue(R.id.notice, "could not stop service");
+            e.printStackTrace();
         }
     }
 
@@ -237,7 +213,6 @@ public class GPSMainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         stopService();
-        UnregisterEventBus();
         super.onDestroy();
     }
 }

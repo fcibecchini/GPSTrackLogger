@@ -2,8 +2,6 @@ package it.uniroma3.android.gpstracklogger.application;
 
 import android.app.Application;
 
-import java.util.List;
-
 import it.uniroma3.android.gpstracklogger.model.GPSController;
 
 /**

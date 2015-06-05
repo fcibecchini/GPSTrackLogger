@@ -8,14 +8,12 @@ import android.location.Location;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import it.uniroma3.android.gpstracklogger.application.Utilities;
 
 public class Track {
     private String name;
@@ -131,19 +129,11 @@ public class Track {
         return (int) totalDistance;
     }
 
-    public String getStringTotalDistance() {
-        return Utilities.getFormattedDistance(getTotalDistance(), true);
-    }
-
     public long getTotalTime() {
         TreeSet<TrackPoint> list = (TreeSet) getTrackPoints();
         long first = list.first().getTime().getTime();
         long last = list.last().getTime().getTime();
         return (last - first)/1000;
-    }
-
-    public String getStringTime() {
-        return Utilities.getFormattedTime(getTotalTime()*1000);
     }
 
     public void setReturn() {
@@ -196,10 +186,6 @@ public class Track {
             tp1 = tp2;
         }
         return totalClimb;
-    }
-
-    public String stringTotalClimb() {
-        return Utilities.getFormattedDistance(totalClimb(), false);
     }
 
     public boolean isEmpty() {

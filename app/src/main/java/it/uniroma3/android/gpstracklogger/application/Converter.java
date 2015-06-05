@@ -3,7 +3,6 @@ package it.uniroma3.android.gpstracklogger.application;
 import android.graphics.Point;
 import android.location.Location;
 
-import it.uniroma3.android.gpstracklogger.model.Track;
 import it.uniroma3.android.gpstracklogger.model.TrackPoint;
 
 /**

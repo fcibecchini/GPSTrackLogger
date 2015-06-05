@@ -2,18 +2,15 @@ package it.uniroma3.android.gpstracklogger.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeSet;
 
 import it.uniroma3.android.gpstracklogger.application.AppSettings;
@@ -144,14 +141,14 @@ public class DrawView extends View {
             String svalue = null;
             if (parameter==fixedTime) {
                 value = track.elapsedTime(tp, parameter * count);
-                svalue = Utilities.getFormattedTime(value*1000).substring(0,5);
+                svalue = Utilities.getFormattedTime(value, false).substring(0,5);
             }
             else if (parameter==fixedDistance) {
                 value = track.elapsedDistance(tp, parameter * count);
-                boolean precisione = false;
+                boolean decimal = false;
                 if (parameter<1000)
-                    precisione = true;
-                svalue = Utilities.getFormattedDistance(value, precisione);
+                    decimal = true;
+                svalue = Utilities.getFormattedDistance(value, decimal);
             }
             if (value != 0 && svalue!=null) {
                 drawText(canvas, p.x, p.y, 5, svalue);

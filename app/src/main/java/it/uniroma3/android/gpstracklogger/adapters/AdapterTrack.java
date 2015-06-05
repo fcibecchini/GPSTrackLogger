@@ -1,15 +1,11 @@
 package it.uniroma3.android.gpstracklogger.adapters;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,6 +15,7 @@ import java.util.List;
 import it.uniroma3.android.gpstracklogger.GraphActivity;
 import it.uniroma3.android.gpstracklogger.R;
 import it.uniroma3.android.gpstracklogger.application.Session;
+import it.uniroma3.android.gpstracklogger.application.Utilities;
 import it.uniroma3.android.gpstracklogger.model.Track;
 
 /**
@@ -81,11 +78,11 @@ public class AdapterTrack extends ArrayAdapter<Track> {
                 holder = (ViewHolder) vi.getTag();
             }
             holder.trackname.setText(lTrack.get(position).getName().replace(".gpx", ""));
-            holder.trackdistance.setText(lTrack.get(position).getStringTotalDistance());
-            String time = lTrack.get(position).getStringTime();
-            String formatted = "("+time.substring(0,2)+"h "+time.substring(3, 5)+"m "+time.substring(6)+"s)";
+            holder.trackdistance.setText(Utilities.getFormattedDistance(lTrack.get(position).getTotalDistance(), true));
+            String time = Utilities.getFormattedTime(lTrack.get(position).getTotalTime(), true);
+            String formatted = "("+time+")";
             holder.tracktime.setText(formatted);
-            holder.trackelevationchange.setText("Total Climb: "+lTrack.get(position).stringTotalClimb());
+            holder.trackelevationchange.setText("Total Climb: "+Utilities.getFormattedDistance(lTrack.get(position).totalClimb(), false));
 
             holder.unloadtrack.setOnClickListener(new View.OnClickListener() {
                 @Override
