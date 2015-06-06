@@ -13,7 +13,7 @@ public class AppSettings extends Application {
     private static int minTime, minDistance, period, fixedDistance, fixedTime;
     private static SharedPreferences preferences;
     private static boolean latitudeBar, longitudeBar;
-    private static String directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString();
+    private static String directory;
 
     public static int getMinTime() {
         return minTime;
@@ -90,6 +90,7 @@ public class AppSettings extends Application {
         setLongitudeBar(preferences.getBoolean("longitudeBar", true));
         setFixedDistance(Integer.valueOf(preferences.getString("elapsedDist", "0")));
         setFixedTime(Integer.valueOf(preferences.getString("elapsedTime", "0")));
+        setDirectory(context.getFilesDir().toString());
     }
 
 }
