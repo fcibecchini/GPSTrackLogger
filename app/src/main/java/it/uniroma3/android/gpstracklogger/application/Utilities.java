@@ -2,9 +2,7 @@ package it.uniroma3.android.gpstracklogger.application;
 
 import android.app.Application;
 import android.graphics.Color;
-import android.location.Location;
 
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -89,8 +87,7 @@ public class Utilities extends Application {
         String sDegrees = String.valueOf(degrees)+"° ";
         String sMinutes = String.valueOf((int)minutes)+"' ";
         String sSeconds = String.valueOf((int)seconds)+"'' ";
-        String formattedString = sDegrees + sMinutes + sSeconds;
-        return formattedString;
+        return sDegrees + sMinutes + sSeconds;
     }
 
     public static String parseLatitude(double latitude) {
