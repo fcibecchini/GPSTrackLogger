@@ -86,12 +86,30 @@ public class GPSMainActivity extends AppCompatActivity {
 
     public void returnClick() {
         if (Session.isStarted() && !Session.isReturning()) {
-            if (Session.getController().setReturn()) {
-                showTripInfo();
-                Session.setReturning(true);
-            }
-            else
-                alertSessionState("No trackpoints...");
+            new AlertDialog.Builder(this)
+                    .setTitle("Conferma")
+                    .setMessage("conferma ritorno?")
+                    .setPositiveButton("Sì", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (Session.getController().setReturn()) {
+                                showTripInfo();
+                                Session.setReturning(true);
+                            }
+                            else {
+                                alertSessionState("No trackpoints...");
+                            }
+                            dialog.cancel();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
         else
             alertSessionState("Not tracking...");
