@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Fragment;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -20,53 +23,76 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.uniroma3.android.gpstracklogger.R;
+import it.uniroma3.android.gpstracklogger.adapters.FileAdapter;
 import it.uniroma3.android.gpstracklogger.application.AppSettings;
 import it.uniroma3.android.gpstracklogger.application.Session;
 import it.uniroma3.android.gpstracklogger.files.FileLoggerFactory;
 
 public class LoadFileFragment extends Fragment {
-    private File mPath = new File(AppSettings.getDirectory());
-    private static final String FTYPE = ".gpx";
+    private String appDirectory;
+    private String publicDir;
+    private String FTYPE;
+    private File mPath;
     private String chosenFile;
     private List<String> list;
     ListView listView;
     LinearLayout llayout;
+    private FileAdapter adapter;
+
+    public LoadFileFragment() {
+        appDirectory = AppSettings.getDirectory();
+        FTYPE = ".gpx";
+        publicDir = Environment.getExternalStoragePublicDirectory("/").getAbsolutePath();
+        mPath = new File(appDirectory);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         llayout = (LinearLayout) inflater.inflate(R.layout.fragment_loadfile, container, false);
-        loadFileList();
         listView = (ListView) llayout.findViewById(R.id.list);
-
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, list);
-        listView.setAdapter(adapter);
+        setAdapter();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
+
                 chosenFile = (String) listView.getItemAtPosition(position);
-                FileLoggerFactory.loadGpxFile(chosenFile);
-                ViewPropertyAnimator viewPropertyAnimator = view.animate().setDuration(500).alpha(0);
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                    viewPropertyAnimator.setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            list.remove(chosenFile);
-                            adapter.notifyDataSetChanged();
-                            view.setAlpha(1);
-                        }
-                    });
-                } else {
-                    viewPropertyAnimator.withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            list.remove(chosenFile);
-                            adapter.notifyDataSetChanged();
-                            view.setAlpha(1);
-                        }
-                    });
+
+                if (chosenFile.contains(FTYPE)) {
+                    FileLoggerFactory.loadGpxFile(mPath.getAbsolutePath()+"/"+chosenFile);
+                    ViewPropertyAnimator viewPropertyAnimator = view.animate().setDuration(500).alpha(0);
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                        viewPropertyAnimator.setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                list.remove(chosenFile);
+                                adapter.notifyDataSetChanged();
+                                view.setAlpha(1);
+                            }
+                        });
+                    } else {
+                        viewPropertyAnimator.withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                list.remove(chosenFile);
+                                adapter.notifyDataSetChanged();
+                                view.setAlpha(1);
+                            }
+                        });
+                    }
+                }
+
+                else {
+                    if (chosenFile.equals("Public Directory")) {
+                        mPath = new File(publicDir);
+                    } else if (chosenFile.equals("App Directory")) {
+                        mPath = new File(appDirectory);
+                    } else if (chosenFile.equals("..")) {
+                        mPath = mPath.getParentFile();
+                    } else {
+                        mPath = new File(mPath.getPath() + "/" + chosenFile);
+                    }
+                    setAdapter();
                 }
             }
         });
@@ -74,14 +100,30 @@ public class LoadFileFragment extends Fragment {
         return llayout;
     }
 
+    private void setAdapter() {
+        loadFileList();
+        TextView path = (TextView) llayout.findViewById(R.id.dirpath);
+        path.setText(mPath.getAbsolutePath());
+        adapter = new FileAdapter(getActivity(),0, list);
+        listView.setAdapter(adapter);
+    }
+
     private void loadFileList() {
         try {
             mPath.mkdirs();
-        }
-        catch(SecurityException e) {
+        } catch (SecurityException e) {
             e.printStackTrace();
         }
         list = new ArrayList<>();
+        if (mPath.getAbsolutePath().equals(appDirectory)) {
+            list.add("Public Directory");
+        }
+        else if (mPath.getAbsolutePath().equals(publicDir)) {
+            list.add("App Directory");
+        }
+        else {
+            list.add("..");
+        }
         if(mPath.exists()) {
             FilenameFilter filter = new FilenameFilter() {
 
@@ -93,13 +135,16 @@ public class LoadFileFragment extends Fragment {
 
             };
             String[] mFileList = mPath.list(filter);
-            for (String file : mFileList) {
-                if (Session.getController().getImportedTrack(file) == null) {
-                    list.add(file);
+            if (mFileList != null) {
+                for (String file : mFileList) {
+                    if (!file.contains(FTYPE) || Session.getController().getImportedTrack(file) == null) {
+                        list.add(file);
+                    }
                 }
+            }
+            else {
+                Toast.makeText(getActivity(), "No files to display...", Toast.LENGTH_SHORT).show();
             }
         }
     }
-
-
 }

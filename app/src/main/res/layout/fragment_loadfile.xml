@@ -3,11 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:id="@+id/dirpath"
+        android:gravity="center" />
     <ListView
         android:id="@+id/list"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/abc_dialog_list_padding_vertical_material">
     </ListView>
 
 </LinearLayout>

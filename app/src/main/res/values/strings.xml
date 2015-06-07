@@ -35,6 +35,7 @@
     <string name="currenttime">Tempo trascorso</string>
     <string name="fit">Fit</string>
     <string name="restore">Restore</string>
+    <string name="fileicon">File icon</string>
 
     <string-array name="action_list">
         <item>View Map</item>

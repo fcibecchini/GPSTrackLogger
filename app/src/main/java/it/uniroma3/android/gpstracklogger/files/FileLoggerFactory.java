@@ -32,7 +32,9 @@ public class FileLoggerFactory {
     }
 
     public static GPXFileLoader getLoader(String gpxFileName) {
-        File gpx = new File(directory, gpxFileName);
+        String name = gpxFileName.substring(gpxFileName.lastIndexOf("/"));
+        String dir = gpxFileName.substring(0,gpxFileName.lastIndexOf("/"));
+        File gpx = new File(dir, name);
         return new GPXFileLoader(gpx);
     }
 

@@ -90,7 +90,7 @@ public class AppSettings extends Application {
         setLongitudeBar(preferences.getBoolean("longitudeBar", true));
         setFixedDistance(Integer.valueOf(preferences.getString("elapsedDist", "0")));
         setFixedTime(Integer.valueOf(preferences.getString("elapsedTime", "0")));
-        setDirectory(context.getFilesDir().toString());
+        setDirectory(context.getFilesDir().getAbsolutePath());
     }
 
 }
