@@ -47,7 +47,9 @@
         <activity
             android:name=".GraphActivity"
             android:label="@string/title_activity_graph">
-
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="it.uniroma3.android.gpstracklogger.GPSMainActivity" />
         </activity>
     </application>
 
