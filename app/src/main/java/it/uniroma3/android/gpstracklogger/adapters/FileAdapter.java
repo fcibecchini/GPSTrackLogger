@@ -64,9 +64,9 @@ public class FileAdapter extends ArrayAdapter<String> {
             String file = files.get(position);
             holder.fileName.setText(file);
             if (file.contains(".gpx"))
-                holder.icon.setImageResource(R.drawable.ic_menu_add);
+                holder.icon.setImageResource(R.drawable.ic_add_circle_outline_black_48dp);
             else
-                holder.icon.setImageResource(R.drawable.ic_menu_archive);
+                holder.icon.setImageResource(R.drawable.ic_folder_open_black_48dp);
 
         } catch (Exception e) {
 

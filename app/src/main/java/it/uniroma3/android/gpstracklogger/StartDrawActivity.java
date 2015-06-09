@@ -8,8 +8,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ZoomControls;
+import android.widget.ImageButton;
 
 import it.uniroma3.android.gpstracklogger.application.Session;
 import it.uniroma3.android.gpstracklogger.views.DrawView;
@@ -50,22 +49,23 @@ public class StartDrawActivity extends Activity implements SensorEventListener {
     }
 
     private void loadButtons() {
-        Button fit = (Button) findViewById(R.id.fit);
-        ZoomControls zoom = (ZoomControls) findViewById(R.id.zoomControls);
-        Button restore = (Button) findViewById(R.id.restore);
+        ImageButton fit = (ImageButton) findViewById(R.id.fit);
+        ImageButton zoomIn = (ImageButton) findViewById(R.id.zoomin);
+        ImageButton zoomOut = (ImageButton) findViewById(R.id.zoomout);
+        ImageButton restore = (ImageButton) findViewById(R.id.restore);
         fit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fit();
             }
         });
-        zoom.setOnZoomInClickListener(new View.OnClickListener() {
+        zoomIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 zoomIn();
             }
         });
-        zoom.setOnZoomOutClickListener(new View.OnClickListener() {
+        zoomOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 zoomOut();
@@ -135,17 +135,17 @@ public class StartDrawActivity extends Activity implements SensorEventListener {
     }
 
     private void zoomIn() {
-        if (scaleView.getXMetersPerInch()>10 &&
-                scaleView.getYMetersPerInch()>10)
+        if (scaleView.getXMetersPerInch()>30 &&
+                scaleView.getYMetersPerInch()>30)
             drawView.setScala(1.5);
         showScala();
         drawView.invalidate();
     }
 
     private void zoomOut() {
-        if (scaleView.getXMetersPerInch()<100000 &&
-                scaleView.getYMetersPerInch()<100000)
-            drawView.setScala(1/1.5);
+        if (scaleView.getXMetersPerInch()<10000 &&
+                scaleView.getYMetersPerInch()<10000)
+            drawView.setScala(1 / 1.5);
         showScala();
         drawView.invalidate();
     }
