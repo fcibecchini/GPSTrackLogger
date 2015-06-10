@@ -1,8 +1,8 @@
 package it.uniroma3.android.gpstracklogger.application;
 
-import android.app.Application;
 import android.graphics.Color;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,10 +14,10 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Fabio on 29/05/2015.
  */
-public class Utilities extends Application {
+public class Utilities {
     private static Map<String, Integer> colors;
 
-    public static Map getColors() {
+    public static Map<String, Integer> getColors() {
         if (colors == null) {
             colors = new HashMap<>();
             colors.put("current0A", Color.BLACK);
@@ -106,6 +106,18 @@ public class Utilities extends Application {
         else
             lon+="W";
         return lon;
+    }
+
+    public static String formatSpeed(float speed) {
+        NumberFormat nf = NumberFormat.getInstance();
+        nf.setMaximumFractionDigits(2);
+        return nf.format(speed*3.6)+"km/h";
+    }
+
+    public static String formatAltitude(double altitude) {
+        NumberFormat nf = NumberFormat.getInstance();
+        nf.setMaximumFractionDigits(1);
+        return nf.format(altitude)+"m";
     }
 
 }

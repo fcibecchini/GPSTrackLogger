@@ -34,8 +34,8 @@ public class LocDetailsFragment extends Fragment {
             displayProviderInfo();
         TreeSet<TrackPoint> trackPoints = null;
         if (current != null)
-            trackPoints = (TreeSet) current.getTrackPoints();
-        if (!trackPoints.isEmpty()) {
+            trackPoints = (TreeSet<TrackPoint>) current.getTrackPoints();
+        if (trackPoints!=null && !trackPoints.isEmpty()) {
             setTextViewValue(R.id.currentdist, Utilities.getFormattedDistance(current.getTotalDistance(), true));
             setTextViewValue(R.id.currenttime, Utilities.getFormattedTime(current.getTotalTime(), true));
             displayLocationInfo(trackPoints.last());
@@ -51,12 +51,18 @@ public class LocDetailsFragment extends Fragment {
         setTextViewValue(R.id.latitude, Utilities.parseLatitude(tp.getLatitude()));
         setTextViewValue(R.id.longitude, Utilities.parseLongitude(tp.getLongitude()));
         if (tp.hasAltitude()) {
-            double altitude = tp.getAltitude();
-            setTextViewValue(R.id.altitude, String.valueOf(altitude));
+            int altitude = (int) tp.getAltitude();
+            setTextViewValue(R.id.altitude, Utilities.formatAltitude(altitude));
+        }
+        else {
+            setTextViewValue(R.id.altitude, "N/A");
         }
         if (tp.hasSpeed()) {
             float speed = tp.getSpeed();
-            setTextViewValue(R.id.speed, String.valueOf(speed));
+            setTextViewValue(R.id.speed, Utilities.formatSpeed(speed));
+        }
+        else {
+            setTextViewValue(R.id.speed, "N/A");
         }
     }
 
