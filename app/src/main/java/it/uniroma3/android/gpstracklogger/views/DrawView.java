@@ -104,7 +104,7 @@ public class DrawView extends View {
             textPaint.setTextAlign(Paint.Align.RIGHT);
             int timeCount = 1;
             int distanceCount = 1;
-            TreeSet<TrackPoint> tps = (TreeSet) track.getTrackPoints();
+            TreeSet<TrackPoint> tps = (TreeSet<TrackPoint>) track.getTrackPoints();
             paint.setColor(colors.get(color+i+"A"));
             Iterator<TrackPoint> it = tps.iterator();
             TrackPoint t1 = it.next();

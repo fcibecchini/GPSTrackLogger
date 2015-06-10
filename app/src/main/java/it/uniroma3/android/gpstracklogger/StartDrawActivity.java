@@ -143,8 +143,8 @@ public class StartDrawActivity extends Activity implements SensorEventListener {
     }
 
     private void zoomOut() {
-        if (scaleView.getXMetersPerInch()<10000 &&
-                scaleView.getYMetersPerInch()<10000)
+        if (scaleView.getXMetersPerInch()<100000 &&
+                scaleView.getYMetersPerInch()<100000)
             drawView.setScala(1 / 1.5);
         showScala();
         drawView.invalidate();

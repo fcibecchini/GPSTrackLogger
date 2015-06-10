@@ -64,7 +64,7 @@ public class Track {
 
     public Map<Double, Double> getAltitudePerTime() {
         Map<Double, Double> map = new TreeMap<>();
-        TreeSet<TrackPoint> tps = (TreeSet) trackPoints;
+        TreeSet<TrackPoint> tps = (TreeSet<TrackPoint>) trackPoints;
         double initTime = (tps.first().getTime().getTime()/1000)/60;
         double tpTime, dTime;
         for (TrackPoint tp : tps) {
@@ -91,7 +91,7 @@ public class Track {
     }
 
     public int elapsedTime(TrackPoint tp, long fixedTime) {
-        TreeSet<TrackPoint> list = (TreeSet) getTrackPoints();
+        TreeSet<TrackPoint> list = (TreeSet<TrackPoint>) getTrackPoints();
         long first = list.first().getTime().getTime();
         long current = tp.getTime().getTime();
         int time = (int) (current - first)/1000;
@@ -130,21 +130,21 @@ public class Track {
     }
 
     public long getTotalTime() {
-        TreeSet<TrackPoint> list = (TreeSet) getTrackPoints();
+        TreeSet<TrackPoint> list = (TreeSet<TrackPoint>) getTrackPoints();
         long first = list.first().getTime().getTime();
         long last = list.last().getTime().getTime();
         return (last - first)/1000;
     }
 
     public void setReturn() {
-        TreeSet<TrackPoint> tPoints = (TreeSet) getTrackPoints();
+        TreeSet<TrackPoint> tPoints = (TreeSet<TrackPoint>) getTrackPoints();
         TrackPoint tp = tPoints.last();
         tp.setDesc("Return");
     }
 
     public TrackPoint[] getBorderPoints() {
         TrackPoint[] tps = new TrackPoint[3];
-        TreeSet<TrackPoint> list = (TreeSet) getTrackPoints();
+        TreeSet<TrackPoint> list = (TreeSet<TrackPoint>) getTrackPoints();
         TrackPoint maxtp1 = maxDistanceFrom(list.first());
         tps[0] = maxtp1;
         TrackPoint maxtp2 = maxDistanceFrom(maxtp1);
