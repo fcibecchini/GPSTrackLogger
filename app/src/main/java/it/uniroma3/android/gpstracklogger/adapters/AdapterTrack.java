@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
@@ -55,7 +56,7 @@ public class AdapterTrack extends ArrayAdapter<Track> {
         public TextView tracktime;
         public TextView trackelevationchange;
         public Button showchart;
-        public Button unloadtrack;
+        public ImageButton unloadtrack;
     }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -71,7 +72,7 @@ public class AdapterTrack extends ArrayAdapter<Track> {
                 holder.tracktime = (TextView) vi.findViewById(R.id.tracktime);
                 holder.trackelevationchange = (TextView) vi.findViewById(R.id.trackelevationchange);
                 holder.showchart = (Button) vi.findViewById(R.id.showchart);
-                holder.unloadtrack = (Button) vi.findViewById(R.id.unloadtrack);
+                holder.unloadtrack = (ImageButton) vi.findViewById(R.id.unloadtrack);
 
                 vi.setTag(holder);
             } else {

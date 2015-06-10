@@ -36,6 +36,8 @@
     <string name="fit">Fit</string>
     <string name="restore">Restore</string>
     <string name="fileicon">File icon</string>
+    <string name="showchart">Show Chart</string>
+    <string name="remove">remove</string>
 
     <string-array name="action_list">
         <item>View Map</item>

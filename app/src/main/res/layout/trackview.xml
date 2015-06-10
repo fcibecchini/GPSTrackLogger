@@ -1,24 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/trackname"
-        android:layout_margin="@dimen/abc_dialog_list_padding_vertical_material"
-        android:textStyle="bold" />
+        android:layout_height="match_parent">
 
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_remove_circle_outline_black_36dp"
+            android:background="@android:color/transparent"
+            android:id="@+id/unloadtrack"
+            android:contentDescription="@string/remove"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:gravity="start"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/trackname"
+            android:layout_toRightOf="@+id/unloadtrack"
+            android:layout_toEndOf="@+id/unloadtrack"
+            android:layout_centerVertical="true"
+            android:gravity="start"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/trackdistance"
-        android:layout_below="@+id/trackname"
         android:layout_marginLeft="@dimen/abc_dialog_list_padding_vertical_material"
+        android:layout_marginStart="@dimen/abc_dialog_list_padding_vertical_material"
         android:layout_marginBottom="@dimen/abc_dialog_list_padding_vertical_material" />
 
     <TextView
@@ -29,34 +53,25 @@
         android:layout_alignTop="@+id/trackdistance"
         android:layout_toRightOf="@+id/trackdistance"
         android:layout_toEndOf="@+id/trackdistance"
-        android:layout_marginLeft="@dimen/abc_dialog_list_padding_vertical_material" />
+        android:layout_marginLeft="@dimen/abc_dialog_list_padding_vertical_material"
+        android:layout_marginStart="@dimen/abc_dialog_list_padding_vertical_material" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/trackelevationchange"
-        android:layout_alignTop="@+id/tracktime"
-        android:layout_toRightOf="@+id/tracktime"
-        android:layout_toEndOf="@+id/tracktime"
-        android:layout_marginLeft="@dimen/abc_dialog_list_padding_vertical_material" />
+        android:layout_below="@+id/trackdistance"
+        android:layout_marginLeft="@dimen/abc_dialog_list_padding_vertical_material"
+        android:layout_marginStart="@dimen/abc_dialog_list_padding_vertical_material" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Show Chart"
+        android:text="@string/showchart"
         android:id="@+id/showchart"
-        android:layout_below="@+id/trackdistance" />
+        android:layout_below="@+id/trackelevationchange" />
+    </RelativeLayout>
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Unload"
-        android:id="@+id/unloadtrack"
-        android:layout_alignTop="@+id/showchart"
-        android:layout_toRightOf="@+id/showchart"
-        android:layout_toEndOf="@+id/showchart" />
-
-</RelativeLayout>
+</LinearLayout>
