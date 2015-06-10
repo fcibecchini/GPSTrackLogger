@@ -2,6 +2,7 @@ package it.uniroma3.android.gpstracklogger.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +18,14 @@ import it.uniroma3.android.gpstracklogger.R;
  * Created by Fabio on 07/06/2015.
  */
 public class FileAdapter extends ArrayAdapter<String> {
+    private Activity activity;
     private List<String> files;
     private static LayoutInflater inflater = null;
 
     public FileAdapter(Activity activity, int textViewResourceId,  List<String> files) {
         super(activity, textViewResourceId, files);
         try {
+            this.activity = activity;
             this.files = files;
             inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         } catch (Exception e) {
