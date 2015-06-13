@@ -5,20 +5,20 @@
         android:title="Measure Mode">
 
         <ListPreference
-            android:title="Minimun time"
-            android:summary="the min time to track"
-            android:key="minTime"
-            android:entries="@array/minTimes"
-            android:entryValues="@array/minTimesValues"
-            android:defaultValue="0" />
-
-        <ListPreference
-            android:title="Minimun distance"
-            android:summary="the min distance to track"
+            android:title="Interval distance"
+            android:summary="long distance, save battery"
             android:key="minDistance"
             android:entries="@array/minDistances"
             android:entryValues="@array/minDistancesValues"
             android:defaultValue="15" />
+
+        <ListPreference
+            android:title="Interval time"
+            android:summary="long time, save battery"
+            android:key="minTime"
+            android:entries="@array/minTimes"
+            android:entryValues="@array/minTimesValues"
+            android:defaultValue="0" />
 
     </PreferenceCategory>
 
@@ -26,8 +26,8 @@
         android:title="Auto Save">
 
         <EditTextPreference
-            android:title="Save Period in minutes"
-            android:summary="period save track"
+            android:title="Autosave"
+            android:summary="autosave period in minutes"
             android:key="period"
             android:inputType="number"
             android:defaultValue="10" />
@@ -38,12 +38,12 @@
         android:title="Map Settings">
 
         <CheckBoxPreference
-            android:title="Show Lat Bar"
+            android:title="Latitude bar"
             android:summary="show the latitude bar"
             android:key="latitudeBar"
             android:defaultValue="true" />
         <CheckBoxPreference
-            android:title="Show Lon Bar"
+            android:title="Longitude bar"
             android:summary="show the longitude bar"
             android:key="longitudeBar"
             android:defaultValue="true" />
@@ -58,7 +58,7 @@
 
         <ListPreference
             android:title="Show time"
-            android:summary="show time every selected time"
+            android:summary="show time every selected minutes"
             android:key="elapsedTime"
             android:entries="@array/elapsedTime"
             android:entryValues="@array/elapsedTimeValues"
