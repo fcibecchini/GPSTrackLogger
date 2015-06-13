@@ -31,8 +31,9 @@ android:id="@+id/activitylayout"
         android:layout_height="wrap_content"
         android:id="@+id/fit"
         android:src="@drawable/ic_fullscreen_black_48dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/restore"
+        android:layout_toStartOf="@+id/restore"
         android:background="@android:color/transparent" />
 
     <ImageButton
@@ -41,9 +42,9 @@ android:id="@+id/activitylayout"
         android:id="@+id/restore"
         android:src="@drawable/ic_refresh_black_48dp"
         android:background="@android:color/transparent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/fit" />
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/zoomout"
+        android:layout_toStartOf="@+id/zoomout" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -62,6 +63,7 @@ android:id="@+id/activitylayout"
         android:src="@drawable/ic_zoom_out_black_48dp"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/zoomin"
+        android:layout_toStartOf="@+id/zoomin"
         android:background="@android:color/transparent" />
 
 </RelativeLayout>
