@@ -27,7 +27,7 @@ public class GPSLoggingService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        RegisterEventBus();
+        registerEventBus();
     }
 
     @Override
@@ -39,15 +39,15 @@ public class GPSLoggingService extends Service {
 
     @Override
     public void onDestroy() {
-        UnregisterEventBus();
+        unregisterEventBus();
         super.onDestroy();
     }
 
-    private void RegisterEventBus() {
+    private void registerEventBus() {
         EventBus.getDefault().register(this);
     }
 
-    private void UnregisterEventBus(){
+    private void unregisterEventBus(){
         try {
             EventBus.getDefault().unregister(this);
         } catch (Throwable t){
@@ -56,7 +56,6 @@ public class GPSLoggingService extends Service {
     }
 
     public void restartGPSManager() {
-        //saveTrack(false);
         stopGPSManager();
         startGPSManager();
     }

@@ -11,11 +11,9 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import de.greenrobot.event.EventBus;
 import it.uniroma3.android.gpstracklogger.R;
 import it.uniroma3.android.gpstracklogger.application.Session;
 import it.uniroma3.android.gpstracklogger.application.Utilities;
-import it.uniroma3.android.gpstracklogger.events.Events;
 import it.uniroma3.android.gpstracklogger.model.Track;
 
 /**
@@ -38,20 +36,18 @@ public class MainFragment extends Fragment {
             stop.setEnabled(true);
             TextView notice = (TextView) rlayout.findViewById(R.id.notice);
             notice.setText("Tracking...");
-            startLogging();
-            Session.getController().scheduleWriting();
+            Session.getController().startLogging();
         }
     }
 
     public void stopClick() {
         if (Session.isStarted()) {
-            if (!Session.getController().getCurrentTrack().isEmpty())
+            if (!Session.getController().isCurrentTrackEmpty())
                 showTripInfo();
             start.setEnabled(true);
             stop.setEnabled(false);
             Session.setReturning(false);
-            Session.getController().stopWriting();
-            stopLogging();
+            Session.getController().stopLogging();
         }
     }
 
@@ -70,15 +66,6 @@ public class MainFragment extends Fragment {
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .show();
     }
-
-    private void startLogging() {
-        EventBus.getDefault().post(new Events.Start());
-    }
-
-    private void stopLogging() {
-        EventBus.getDefault().post(new Events.Stop());
-    }
-
 
     private void loadButtons() {
         start = (Button) rlayout.findViewById(R.id.startButton);

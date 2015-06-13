@@ -26,7 +26,6 @@ import it.uniroma3.android.gpstracklogger.R;
 import it.uniroma3.android.gpstracklogger.adapters.FileAdapter;
 import it.uniroma3.android.gpstracklogger.application.AppSettings;
 import it.uniroma3.android.gpstracklogger.application.Session;
-import it.uniroma3.android.gpstracklogger.files.FileLoggerFactory;
 
 public class LoadFileFragment extends Fragment {
     private String appDirectory;
@@ -59,7 +58,7 @@ public class LoadFileFragment extends Fragment {
                 chosenFile = (String) listView.getItemAtPosition(position);
 
                 if (chosenFile.contains(FTYPE)) {
-                    FileLoggerFactory.loadGpxFile(mPath.getAbsolutePath()+"/"+chosenFile);
+                    Session.getController().loadTrack(mPath.getAbsolutePath()+"/"+chosenFile);
                     ViewPropertyAnimator viewPropertyAnimator = view.animate().setDuration(500).alpha(0);
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
                         viewPropertyAnimator.setListener(new AnimatorListenerAdapter() {

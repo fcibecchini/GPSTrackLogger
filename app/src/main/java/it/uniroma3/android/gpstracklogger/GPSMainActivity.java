@@ -34,6 +34,7 @@ public class GPSMainActivity extends AppCompatActivity {
         loadSettings();
         startService();
         loadFragment();
+        Session.getController().registerEventBus();
     }
 
     private void loadFragment() {
@@ -231,6 +232,7 @@ public class GPSMainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         stopService();
+        Session.getController().unregisterEventBus();
         super.onDestroy();
     }
 }

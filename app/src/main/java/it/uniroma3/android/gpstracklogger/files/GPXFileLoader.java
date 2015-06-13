@@ -18,7 +18,8 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
-import it.uniroma3.android.gpstracklogger.application.Session;
+import de.greenrobot.event.EventBus;
+import it.uniroma3.android.gpstracklogger.events.Events;
 import it.uniroma3.android.gpstracklogger.model.Track;
 import it.uniroma3.android.gpstracklogger.model.TrackPoint;
 import it.uniroma3.android.gpstracklogger.model.TrackPointComparator;
@@ -78,12 +79,12 @@ public class GPXFileLoader {
                 trackPoints = readTrack(parser);
                 Track track = new Track(gpxFile.getName());
                 track.setTrackPoints(trackPoints);
-                Session.getController().addTrack(track);
+                EventBus.getDefault().post(new Events.LoadTrack(track));
             }
             //or for the waypoint tag
             else if (name.equals("wpt")) {
                 TrackPoint waypoint = readWayPoint(parser);
-                Session.getController().addWayPoint(waypoint);
+                EventBus.getDefault().post(new Events.LoadWayPoint(waypoint));
             }
             else {
                 skip(parser);

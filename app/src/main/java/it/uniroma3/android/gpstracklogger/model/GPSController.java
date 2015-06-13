@@ -9,7 +9,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import de.greenrobot.event.EventBus;
 import it.uniroma3.android.gpstracklogger.application.AppSettings;
+import it.uniroma3.android.gpstracklogger.events.Events;
 import it.uniroma3.android.gpstracklogger.files.FileLoggerFactory;
 
 /**
@@ -31,12 +33,28 @@ public class GPSController {
         };
     }
 
+    public void registerEventBus() {
+        EventBus.getDefault().register(this);
+    }
+
+    public void unregisterEventBus(){
+        try {
+            EventBus.getDefault().unregister(this);
+        } catch (Throwable t){
+            //this may crash if registration did not go through. just be safe
+        }
+    }
+
     public void setCurrentTrack() {
         this.currentTrack = new Track();
     }
 
     public Track getCurrentTrack() {
         return this.currentTrack;
+    }
+
+    public boolean isCurrentTrackEmpty() {
+        return this.currentTrack.isEmpty();
     }
 
     public boolean addTrackPoint(Location loc) {
@@ -97,12 +115,34 @@ public class GPSController {
             this.currentTrack = null;
     }
 
+    public void loadTrack(String fileName) {
+        FileLoggerFactory.loadGpxFile(fileName);
+    }
+
     public boolean setReturn() {
         if (!this.currentTrack.isEmpty() && this.currentTrack.size()>1) {
             this.currentTrack.setReturn();
             return true;
         }
         return false;
+    }
+
+    public void startLogging() {
+        EventBus.getDefault().post(new Events.Start());
+        scheduleWriting();
+    }
+
+    public void stopLogging() {
+        stopWriting();
+        EventBus.getDefault().post(new Events.Stop());
+    }
+
+    public void onEvent(Events.LoadTrack loadTrack) {
+        addTrack(loadTrack.track);
+    }
+
+    public void onEvent(Events.LoadWayPoint loadWayPoint) {
+        addWayPoint(loadWayPoint.trackPoint);
     }
 
 }
