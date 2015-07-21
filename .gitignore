@@ -6,3 +6,4 @@
 /build
 /captures
 app/src/androidTest/java/it/uniroma3/android/gpstracklogger/files/GPXFileLoggerTest.java
+.idea/.name
