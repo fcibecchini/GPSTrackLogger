@@ -17,6 +17,7 @@ import java.util.TreeSet;
 
 public class Track {
     private String name;
+    private String path;
     private Set<TrackPoint> trackPoints;
 
     public Track() {
@@ -35,6 +36,14 @@ public class Track {
 
     public void setName(String n) {
         this.name = n;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public Set<TrackPoint> getTrackPoints(){
@@ -186,6 +195,50 @@ public class Track {
             tp1 = tp2;
         }
         return totalClimb;
+    }
+
+    public Map<TrackPoint, Double> getSpeedPerPoint() {
+        Map<TrackPoint, Double> map = new TreeMap<>(new TrackPointComparator());
+        Iterator<TrackPoint> it = trackPoints.iterator();
+        TrackPoint t1 = it.next();
+        map.put(t1, 0.0);
+        double distance, time, speed;
+        while (it.hasNext()) {
+            TrackPoint t2 = it.next();
+            distance = (t1.distanceTo(t2)/1000);
+            time = (double) (t2.getTime().getTime() - t1.getTime().getTime()) / (1000*3600);
+            speed = distance/time;
+            map.put(t2, speed);
+            t1 = t2;
+        }
+        return map;
+    }
+
+    public Track removeErrorSpeed(float speed) {
+        TreeMap<TrackPoint, Double> speedPerPoint = (TreeMap<TrackPoint,Double>) getSpeedPerPoint();
+        Set<TrackPoint> newPoints = new TreeSet<>(new TrackPointComparator());
+        Iterator<TrackPoint> it = trackPoints.iterator();
+        TrackPoint t1 = it.next();
+        newPoints.add(t1);
+        TrackPoint t2 = it.next();
+        TrackPoint t3;
+        double speed1, speed2, speed3, ds1, ds2;
+        while (it.hasNext()) {
+            t3 = it.next();
+            speed1 = speedPerPoint.get(t1);
+            speed2 = speedPerPoint.get(t2);
+            speed3 = speedPerPoint.get(t3);
+            ds1 = Math.abs(speed2 - speed1);
+            ds2 = Math.abs(speed3 - speed2);
+            if ((ds1<15 && ds2<15) || speed2<=speed)
+                newPoints.add(t2);
+            t1 = t2;
+            t2 = t3;
+        }
+        Track newTrack = new Track();
+        newTrack.setName("fixed "+this.getName().replace(".gpx", ""));
+        newTrack.setTrackPoints(newPoints);
+        return newTrack;
     }
 
     public boolean isEmpty() {

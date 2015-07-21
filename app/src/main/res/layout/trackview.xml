@@ -72,6 +72,26 @@
         android:text="@string/showchart"
         android:id="@+id/showchart"
         android:layout_below="@+id/trackelevationchange" />
+     <Button
+         style="?android:attr/buttonStyleSmall"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="@string/errorpoints"
+         android:id="@+id/errorpoints"
+         android:layout_toRightOf="@+id/showchart"
+         android:layout_alignBottom="@+id/showchart"
+         />
+
+     <ImageButton
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:src="@drawable/ic_share_black_48dp"
+         android:background="@android:color/transparent"
+         android:id="@+id/share"
+         android:layout_alignBottom="@+id/errorpoints"
+         android:layout_toRightOf="@+id/errorpoints"
+         android:layout_toEndOf="@+id/errorpoints" />
+
     </RelativeLayout>
 
 </LinearLayout>

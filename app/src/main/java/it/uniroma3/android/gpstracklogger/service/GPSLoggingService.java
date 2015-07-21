@@ -100,6 +100,10 @@ public class GPSLoggingService extends Service {
         startLogging();
     }
 
+    public void onEvent(Events.RestartGPS restart) {
+        restartGPSManager();
+    }
+
     private void startLogging() {
         Session.setStarted(true);
         Session.getController().setCurrentTrack();

@@ -137,6 +137,12 @@ public class GPSController {
         EventBus.getDefault().post(new Events.Stop());
     }
 
+    public void removeErrorSpeed(int position, float speed) {
+        Track track = importedTracks.get(position);
+        Track newTrack = track.removeErrorSpeed(speed);
+        FileLoggerFactory.write(newTrack);
+    }
+
     public void onEvent(Events.LoadTrack loadTrack) {
         addTrack(loadTrack.track);
     }

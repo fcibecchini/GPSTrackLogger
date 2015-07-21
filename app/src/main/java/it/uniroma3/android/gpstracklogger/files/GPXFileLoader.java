@@ -78,6 +78,7 @@ public class GPXFileLoader {
             if (name.equals("trk")) {
                 trackPoints = readTrack(parser);
                 Track track = new Track(gpxFile.getName());
+                track.setPath(gpxFile.getAbsolutePath());
                 track.setTrackPoints(trackPoints);
                 EventBus.getDefault().post(new Events.LoadTrack(track));
             }

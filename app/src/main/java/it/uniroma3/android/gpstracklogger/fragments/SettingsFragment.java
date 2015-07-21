@@ -4,8 +4,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
+import de.greenrobot.event.EventBus;
 import it.uniroma3.android.gpstracklogger.R;
 import it.uniroma3.android.gpstracklogger.application.AppSettings;
+import it.uniroma3.android.gpstracklogger.application.Session;
+import it.uniroma3.android.gpstracklogger.events.Events;
 
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener  {
@@ -35,5 +38,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         AppSettings.loadSettings(getActivity());
+        if (Session.isStarted() && (key.equals("minTime") || key.equals("minDistance"))) {
+            EventBus.getDefault().post(new Events.RestartGPS());
+        }
     }
 }

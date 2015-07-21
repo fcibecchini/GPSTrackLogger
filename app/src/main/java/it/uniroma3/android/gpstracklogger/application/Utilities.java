@@ -47,7 +47,7 @@ public class Utilities {
     }
 
     public static String getISODateTime(Date dateToFormat) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'KK:mm:ss'Z'",
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss'Z'",
                 Locale.ITALIAN);
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         return sdf.format(dateToFormat);
