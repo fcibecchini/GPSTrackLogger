@@ -221,8 +221,8 @@ public class Track {
         TrackPoint t1 = it.next();
         newPoints.add(t1);
         TrackPoint t2 = it.next();
-        TrackPoint t3;
-        double speed1, speed2, speed3, ds1, ds2;
+        TrackPoint t3 = null;
+        double speed1, speed2, speed3=0, ds1, ds2=0;
         while (it.hasNext()) {
             t3 = it.next();
             speed1 = speedPerPoint.get(t1);
@@ -235,6 +235,8 @@ public class Track {
             t1 = t2;
             t2 = t3;
         }
+        if (t3 != null && (speed3<=speed || ds2<15))
+            newPoints.add(t3);
         Track newTrack = new Track();
         newTrack.setName("fixed "+this.getName().replace(".gpx", ""));
         newTrack.setTrackPoints(newPoints);
