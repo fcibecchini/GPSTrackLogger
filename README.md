@@ -1,6 +1,6 @@
 # GPSTrackLogger
 
-GPSTrackLogger is an Android app that logs GPS tracks in GPX format files and show them on a blank map.
+GPSTrackLogger is an Android app that logs GPS tracks in GPX format files and shows them on a blank map.
 Tracks can be imported in read only mode and shown along with the current track.<br>
 No data connection is required during recording. 
 
