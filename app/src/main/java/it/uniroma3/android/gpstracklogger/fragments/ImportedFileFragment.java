@@ -55,7 +55,7 @@ public class ImportedFileFragment extends Fragment {
         tracks = new ArrayList<>();
         tracks.addAll(Session.getController().getImportedTracks());
         if (tracks.isEmpty()) {
-            Toast.makeText(getActivity().getApplicationContext(), "No data loaded...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity().getApplicationContext(), "Menu -> \"Carica tracce\" per caricare le tracce registrate", Toast.LENGTH_LONG).show();
         }
     }
 

@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import it.uniroma3.android.gpstracklogger.application.Session;
 import it.uniroma3.android.gpstracklogger.views.DrawView;
@@ -64,6 +65,7 @@ public class StartDrawActivity extends Activity implements SensorEventListener {
         loadButtons();
         if (Session.isCompass())
             loadSensor();
+        Toast.makeText(getApplicationContext(), "Premi un punto della mappa per spostarlo al centro", Toast.LENGTH_LONG).show();
     }
 
     private void loadButtons() {
