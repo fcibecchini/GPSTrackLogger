@@ -60,7 +60,7 @@ public class GPSMainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         MainFragment fragment = new MainFragment();
         fragmentTransaction.add(R.id.container, fragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.addToBackStack("").commit();
     }
 
     private void setDefaultSettings() {
@@ -79,6 +79,7 @@ public class GPSMainActivity extends AppCompatActivity {
     public void loadClick() {
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, new LoadFileFragment())
+                .addToBackStack("")
                 .commit();
     }
 
@@ -91,6 +92,7 @@ public class GPSMainActivity extends AppCompatActivity {
         if (Session.isStarted()) {
             getFragmentManager().beginTransaction()
                     .replace(R.id.container, new LocDetailsFragment())
+                    .addToBackStack("")
                     .commit();
         }
         else
@@ -100,6 +102,7 @@ public class GPSMainActivity extends AppCompatActivity {
     public void mainClick() {
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, new MainFragment())
+                .addToBackStack("")
                 .commit();
     }
 
@@ -202,6 +205,15 @@ public class GPSMainActivity extends AppCompatActivity {
             stopService(serviceIntent);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
         }
     }
 
