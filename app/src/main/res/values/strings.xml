@@ -39,6 +39,8 @@
     <string name="showchart">Grafico</string>
     <string name="remove">remove</string>
     <string name="errorpoints">Rimuovi error points</string>
+    <string name="running">GPS Track Logger è in esecuzione</string>
+    <string name="notification_stop">Ferma</string>
 
     <string-array name="action_list">
         <item>View Map</item>

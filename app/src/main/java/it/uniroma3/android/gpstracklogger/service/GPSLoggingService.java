@@ -18,13 +18,23 @@
 
 package it.uniroma3.android.gpstracklogger.service;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 import de.greenrobot.event.EventBus;
+import it.uniroma3.android.gpstracklogger.GPSMainActivity;
+import it.uniroma3.android.gpstracklogger.R;
 import it.uniroma3.android.gpstracklogger.application.AppSettings;
 import it.uniroma3.android.gpstracklogger.events.Events;
 import it.uniroma3.android.gpstracklogger.application.Session;
@@ -36,6 +46,9 @@ import it.uniroma3.android.gpstracklogger.listener.GPSLocationListener;
 public class GPSLoggingService extends Service {
     protected LocationManager gpsLocationManager;
     private GPSLocationListener gpsLocationListener;
+    private NotificationManager notificationManager;
+    private static int NOTIFICATION_ID = 294071;
+    private NotificationCompat.Builder nfc = null;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -51,7 +64,9 @@ public class GPSLoggingService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Session.getController();
-        startGPSManager();
+        if (Session.isStarted()) {
+            startGPSManager();
+        }
         return START_REDELIVER_INTENT;
     }
 
@@ -98,8 +113,50 @@ public class GPSLoggingService extends Service {
     public void onLocationChanged(Location location) {
         if (Session.isStarted()) {
             Session.getController().addTrackPoint(location);
+            Session.setCurrentLocation(location);
             Session.setLocationChanged(true);
+            showNotification();
         }
+    }
+
+    private void removeNotification() {
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+    }
+
+    private void showNotification() {
+        Intent contentIntent = new Intent(this, GPSMainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntent(contentIntent);
+        PendingIntent pending = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        String contentText = getString(R.string.running);
+        long notificationTime = System.currentTimeMillis();
+
+        if (Session.isLocationChanged()) {
+            NumberFormat nf = new DecimalFormat("###.#####");
+            Location last = Session.getCurrentLocation();
+            contentText = "Lat" + ": " + nf.format(last.getLatitude()) + ", "
+                    + "Lon" + ": " + nf.format(last.getLongitude());
+
+            notificationTime = Session.getCurrentLocation().getTime();
+        }
+
+        if (nfc == null) {
+            nfc = new NotificationCompat.Builder(getApplicationContext())
+                    .setSmallIcon(R.drawable.ic_gps_fixed_black_18dp)
+                    .setPriority(Notification.PRIORITY_MAX)
+                    .setContentTitle(contentText)
+                    .setOngoing(true)
+                    .setContentIntent(pending);
+        }
+
+        nfc.setContentTitle(contentText);
+        nfc.setContentText(getString(R.string.app_name));
+        nfc.setWhen(notificationTime);
+
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(NOTIFICATION_ID, nfc.build());
     }
 
     public void gpsEnabled(boolean enabled) {
@@ -125,12 +182,20 @@ public class GPSLoggingService extends Service {
     private void startLogging() {
         Session.setStarted(true);
         Session.getController().setCurrentTrack();
+        try {
+            startForeground(NOTIFICATION_ID, new Notification());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        showNotification();
         startGPSManager();
     }
 
     private void stopLogging() {
         Session.setStarted(false);
         Session.setLocationChanged(false);
+        stopForeground(true);
+        removeNotification();
         stopGPSManager();
         saveTrack(true);
     }

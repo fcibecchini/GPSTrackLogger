@@ -19,6 +19,7 @@
 package it.uniroma3.android.gpstracklogger;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
@@ -52,15 +53,28 @@ public class GPSMainActivity extends AppCompatActivity {
         loadSettings();
         startService();
         loadFragment();
-        Session.getController().registerEventBus();
+        if (!Session.isControllerRegistered()) {
+            Session.getController().registerEventBus();
+            Session.setControllerRegistered(true);
+        }
     }
 
     private void loadFragment() {
         FragmentManager fragmentManager = getFragmentManager();
+        Fragment fragment;
+        String fragmentName;
+        if (fragmentManager.getBackStackEntryCount() == 0) {
+            fragment = new MainFragment();
+            fragmentName = "Main";
+        }
+        else {
+            fragmentName = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()-1).getName();
+            fragment = fragmentManager.findFragmentByTag(fragmentName);
+        }
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        MainFragment fragment = new MainFragment();
-        fragmentTransaction.add(R.id.container, fragment);
-        fragmentTransaction.addToBackStack("").commit();
+        fragmentTransaction.replace(R.id.container, fragment, fragmentName);
+        if (fragmentManager.getBackStackEntryCount() == 0)
+            fragmentTransaction.addToBackStack(fragmentName).commit();
     }
 
     private void setDefaultSettings() {
@@ -78,8 +92,8 @@ public class GPSMainActivity extends AppCompatActivity {
 
     public void loadClick() {
         getFragmentManager().beginTransaction()
-                .replace(R.id.container, new LoadFileFragment())
-                .addToBackStack("")
+                .replace(R.id.container, new LoadFileFragment(), "Load")
+                .addToBackStack("Load")
                 .commit();
     }
 
@@ -91,8 +105,8 @@ public class GPSMainActivity extends AppCompatActivity {
     public void detailsClick() {
         if (Session.isStarted()) {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container, new LocDetailsFragment())
-                    .addToBackStack("")
+                    .replace(R.id.container, new LocDetailsFragment(), "Details")
+                    .addToBackStack("Details")
                     .commit();
         }
         else
@@ -101,8 +115,8 @@ public class GPSMainActivity extends AppCompatActivity {
 
     public void mainClick() {
         getFragmentManager().beginTransaction()
-                .replace(R.id.container, new MainFragment())
-                .addToBackStack("")
+                .replace(R.id.container, new MainFragment(), "Main")
+                .addToBackStack("Main")
                 .commit();
     }
 
@@ -201,10 +215,12 @@ public class GPSMainActivity extends AppCompatActivity {
     }
 
     private void stopService() {
-        try {
-            stopService(serviceIntent);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!Session.isStarted()) {
+            try {
+                stopService(serviceIntent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -260,9 +276,28 @@ public class GPSMainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        startService();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService();
+    }
+
+    @Override
+    protected void onPause() {
+        stopService();
+        super.onPause();
+    }
+
+    @Override
     protected void onDestroy() {
         stopService();
         Session.getController().unregisterEventBus();
+        Session.setControllerRegistered(false);
         super.onDestroy();
     }
 }

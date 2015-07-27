@@ -19,16 +19,19 @@
 package it.uniroma3.android.gpstracklogger.application;
 
 import android.app.Application;
+import android.location.Location;
 
 import it.uniroma3.android.gpstracklogger.model.GPSController;
+import it.uniroma3.android.gpstracklogger.model.TrackPoint;
 
 /**
  * Created by Fabio on 06/05/2015.
  */
 public class Session extends Application {
     private static GPSController controller;
+    private static Location currentLocation;
     private static Converter converter;
-    private static boolean started, converterSet, compass, returning;
+    private static boolean started, converterSet, compass, returning, controllerRegistered;
     private static boolean providerEnabled, providerAvailable, locationChanged;
 
     public static boolean isStarted() {
@@ -102,5 +105,21 @@ public class Session extends Application {
 
     public static void setReturning(boolean returning) {
         Session.returning = returning;
+    }
+
+    public static boolean isControllerRegistered() {
+        return controllerRegistered;
+    }
+
+    public static void setControllerRegistered(boolean controllerRegistered) {
+        Session.controllerRegistered = controllerRegistered;
+    }
+
+    public static Location getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public static void setCurrentLocation(Location currentLocation) {
+        Session.currentLocation = currentLocation;
     }
 }

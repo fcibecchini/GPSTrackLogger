@@ -113,8 +113,8 @@ public class MainFragment extends Fragment {
 
     public void trackListClick() {
         getFragmentManager().beginTransaction()
-                .replace(R.id.container, new ImportedFileFragment())
-                .addToBackStack("")
+                .replace(R.id.container, new ImportedFileFragment(), "TrackList")
+                .addToBackStack("TrackList")
                 .commit();
     }
 
